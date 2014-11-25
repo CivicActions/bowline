@@ -1,0 +1,15 @@
+{
+  "name": "group/project",
+  "description": "The Project.",
+  "require": {
+    "drupal/drupal-extension": "*",
+    "phploc/phploc": "*",
+    "sebastian/phpcpd": "*",
+    "phpunit/phpunit": "*",
+    "covex-nn/phpcb": "*",
+    "squizlabs/php_codesniffer": "*",
+    "pdepend/pdepend": "*",
+    "phpmd/phpmd": "*",
+    "drush/drush": "6.*"
+  }
+}

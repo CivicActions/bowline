@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# Make sure we are in the scripts directory.
+cd $(dirname $0)
+source include.bash
+[[ $FIG ]] || FIG=fig
+
+# If this isn't the docker container, call this script in the container.
+if [ $(pwd) != '/var/www/scripts' ]; then
+  ./build
+  cd ..
+  container=$($FIG ps|grep web|awk '{print $1}')
+  docker exec -it $container /var/www/scripts/behat "$@"
+  exit
+fi
+
+cd ..
+
+# If first arg is "logs" (a special arg for this script) then do pretty logs.
+if [ "$1" = "logs" ]; then
+  PROGRESS_LOG='logs/progress.log'
+  BEHAT_PRETTY_LOGS="-f pretty,progress,junit --out ,${PROGRESS_LOG},logs/xml"
+  echo "Cleaning up previous test results."
+  rm -fv logs/xml/TEST*.xml
+  shift
+else
+  BEHAT_PRETTY_LOGS=""
+fi
+
+# Run behat passing all the args from the command line.
+echo -e "\n\033[32mBehat tests\033[m"
+./vendor/behat/behat/bin/behat $BEHAT_PRETTY_LOGS "$@"
+EXIT=$?
+
+echo Exit Status: $EXIT
+exit $EXIT

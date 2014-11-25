@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+cd $(dirname $0)/..
+source scripts/include.bash
+[[ $FIG ]] || FIG=fig
+
+case "$1" in
+  destroy)
+    echo "Destroy: This action includes removing the database container and its Drupal database."
+    echo "Are you sure you want to stop and remove the containers for this project [Y/n]?"
+    read confirm;
+    [[ $confirm == 'n' ]] && exit 1;
+    $FIG stop; $FIG rm # press y to remove containers
+    echo "Do you also want to remove the docker images [Y/n]?"
+    read confirm;
+    [[ $confirm == 'n' ]] && exit 1;
+    docker rmi --no-prune=true ${SLUG}_web
+    exit 0;
+    ;;
+  sync-db)
+    echo "# Syncing snapshot (not imported to container)"
+    rsync -P user@example.com:latest/snapshot.sql.gz .snapshot.sql.gz
+    exit 0;
+    ;;
+  import)
+    echo "# BUILDING CONTAINERS"
+    # Start containers, build if necessary.
+    $FIG up -d --no-recreate
+    container=$($FIG ps|grep web|awk '{print $1}')
+    # Import snapshot of database
+    docker exec -it $container /var/www/scripts/import
+    ;;
+  *)
+    echo "# BUILDING CONTAINERS"
+    echo "Building without importing database. (Run as './scripts/build import' if you need to load the db.)"
+    # Start containers, build if necessary.
+    $FIG up -d --no-recreate
+    container=$($FIG ps|grep web|awk '{print $1}')
+    ;;
+esac
+
+# Set up composer.
+docker exec -it $container composer self-update
+docker exec -it $container composer --working-dir=/var/www install
+
+# Fix file ownership. We set the host user to own everything then give group
+# write access to the web server.
+docker exec -it $container /var/www/scripts/fix-perms
+
+db_container=$($FIG ps|grep db|awk '{print $1}')
+IP=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' ${container})
+DB_IP=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' ${db_container})
+
+echo "# Git report"
+./scripts/git-report
+
+echo "# Fig/docker container status"
+$FIG ps
+
+echo ""
+echo "# BUILD COMPLETE"
+echo "database IP: ${DB_IP}; web IP: ${IP}"
+echo "web address: http://${IP}/"
+echo ""
+echo "  If the above link does not work and you are using Boot2Docker,"
+echo "  run the following command then try the link again."
+echo "      sudo route -n add 172.17.0.0/16 192.168.59.103"
+echo ""

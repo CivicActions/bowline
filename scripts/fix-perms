@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+cd $(dirname $0)/..
+source scripts/include.bash
+
+if [ $GIT_ROOT != "/var/www" ]; then
+  echo "This script should be run from within the container, which is done for you in the build script."
+  exit
+fi
+
+echo "# Fixing file ownership and permissions"
+cd /var/www
+OWNER=$(stat -c '%u' .)
+chown -R $OWNER /var/www
+chgrp -R www-data /var/www/logs /var/www/files-private /var/www/docroot/sites/default/files
+chmod -R g+w /var/www/files-private /var/www/docroot/sites/default/files
+echo "done."

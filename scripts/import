@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# Make sure we are in the scripts directory.
+cd $(dirname $0)
+
+# If this isn't the docker container, call this script in the container.
+if [ $(pwd) != '/var/www/scripts' ]; then
+  echo "This script should be run from inside the container."
+  echo "You probably want to try ./build import"
+  exit 1
+fi
+
+#### Import
+cd ../docroot
+# @TODO: check for the file first.
+
+echo "NOTE: Please ignore any warnings about 'Connection refused' while waiting for the db service to start"
+i=0
+while ! bash -c "cat < /dev/null > /dev/tcp/dbhost/3306"; do
+  i=$(($i+1))
+  if [ "$i" -gt 7 ]; then
+    echo "Cannot connect to database. Make sure it is running and the web container is linked to it."
+    exit 1;
+  fi
+  sleep 2;
+done
+zcat ../.snapshot.sql.gz | mysql --host=dbhost --user=dbuser --password=dbpass drupal
+

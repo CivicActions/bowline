@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+cd $(dirname $0)/..
+source scripts/include.bash
+
+# Show the last commit message.
+git log --abbrev-commit --oneline -1
+
+
+# Detailed report for developer.
+
+git remote update
+
+LOCAL=$(git rev-parse @)
+REMOTE=$(git rev-parse @{u})
+
+if [ $? != 0 ]; then
+  # If upstream returns "fatal: HEAD does not point to a branch" then
+  # this is likely being run by jenkins anyway.
+  exit
+fi
+
+BASE=$(git merge-base @ @{u})
+
+if [ $LOCAL = $REMOTE ]; then
+  echo "Up-to-date"
+elif [ $LOCAL = $BASE ]; then
+  echo "Need to pull"
+elif [ $REMOTE = $BASE ]; then
+  echo "Need to push"
+else
+  echo "Diverged"
+fi
+
+echo "# The following report demonstrates how close you are to the integration branch."
+echo "# Lines starting with ! are column headings. The @ represents your current"
+echo "# branch and @{u} is your upstream branch. More than one + in the first column"
+echo "# likely indicates that you need to rebase."
+git show-branch --no-name origin/integration @ @{u}

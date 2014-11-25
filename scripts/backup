@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+cd $(dirname $0)/..
+source scripts/include.bash
+
+FILENAME=${GIT_ROOT}/.${GIT_BRANCH}.sql
+docker exec -it $container mysqldump --host=dbhost --user=dbuser --password=dbpass drupal > $FILENAME
+gzip $FILENAME
+
+echo ""
+echo "# BACKUP COMPLETE"
+echo "File saved as ${FILENAME}.gz"
