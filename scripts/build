@@ -51,9 +51,6 @@ db_container=$($FIG ps|grep db|awk '{print $1}')
 IP=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' ${container})
 DB_IP=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' ${db_container})
 
-echo "# Git report"
-./scripts/git-report
-
 echo "# Fig/docker container status"
 $FIG ps
 
