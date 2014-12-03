@@ -3,14 +3,9 @@
 export PATH=$HOME/bin:$PATH
 
 # Create required directories just in case.
-mkdir -p /var/www/docroot /var/www/logs
+mkdir -p /var/www/docroot/sites/default/files /var/www/logs /var/www/files-private
 echo "*" > /var/www/logs/.gitignore
-
-# Use project's drush if exists.
-if [[ -e /var/www/vender/drush ]]; then
-  export DRUSH="/var/www/vendor/drush/drush/drush"
-  ln -s $DRUSH /usr/local/bin/drush
-fi
+echo "*" > /var/www/files-private/.gitignore
 
 # Set the apache user and group to match the host user.
 OWNER=$(stat -c '%u' /var/www)

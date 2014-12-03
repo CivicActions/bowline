@@ -11,5 +11,5 @@ FIG="fig"  # Add command options here.
 if [ $GIT_ROOT != '/var/www' ]; then
   container="${SLUG}_web_1"
   IP=$(docker inspect --format='{{.NetworkSettings.IPAddress}}' ${container})
-  alias crush="docker exec -it $container /var/www/vendor/drush/drush/drush --root=/var/www/docroot --uri=http://${IP}"
+  alias crush="docker exec -it $container sudo -u www-data /var/www/vendor/drush/drush/drush --root=/var/www/docroot --uri=http://${IP}"
 fi
