@@ -39,6 +39,7 @@ Thumbs.db
 #########
 tests/behat/local.yml
 *.sass-cache
+.drush
 
 # Composer
 vendor/*
