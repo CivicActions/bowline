@@ -3,7 +3,7 @@
 ## Install Instructions
 
 ### New Drupal Project
-1. Clone this repo. `git clone git@git.civicactions.net:david.numan/transfigure.git myproject` Then `cd myprojecet`. (Change myproject to the name of your project.)
+1. Clone this repo. `git clone git@git.civicactions.net:david.numan/bowline.git myproject` Then `cd myprojecet`. (Change myproject to the name of your project.)
 1. [Download and extract drupal](https://www.drupal.org/start) then move the drupal root directory to docroot. If you have drush installed you can do this:
   - `drush dl drupal && drupal-* docroot`
 1. Install Drupal
@@ -17,10 +17,10 @@
 ### Existing Drupal Project
 1. Go to your project workspace. Make sure your git working directory is clean with `git status` and you might want to try this in a new branch for testing first with `git checkout -b dockerize`.
 1. Add this repository as a remote:
-  - `git remote add xfigr git@git.civicactions.net:david.numan/transfigure.git`
+  - `git remote add bowline git@git.civicactions.net:david.numan/bowline.git`
   - `git remote update`
-1. Check out the transfigure code. This will stage the files in your current branch
-  - `git checkout xfigr/master .`
+1. Check out the bowline code. This will stage the files in your current branch
+  - `git checkout bowline/master .`
   - It is possible though unlikely that this step modified some of your files. Check this with `git status` to see what is staged. Or more specifically, you can `git status -s|grep ^M` to list modified files. Feel free to correct these now if you like but you should be able to continue either way.
 1. Add docker setting to Drupal's settings.php file:
   - `./scripts/build init`
