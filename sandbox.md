@@ -14,7 +14,7 @@ Get the latest "integration" branch code for PROJECT. You will be able to work w
 
 ``` bash
 cd ~/workspace
-git clone git@git.civicactions.net:namespace/PROJECT.git PROJECT
+git clone REPOSITORY_URL PROJECT
 cd PROJECT
 ```
 NOTE: The rest of these commands run from the `~/workspace/PROJECT` directory.
