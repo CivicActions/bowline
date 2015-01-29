@@ -1,5 +1,9 @@
 # Docker for Drupal development and testing
 
+## Requirements
+1. [Docker](https://www.docker.com/)
+1. [Fig](http://www.fig.sh/)
+
 ## Install Instructions
 
 ### New Drupal Project
