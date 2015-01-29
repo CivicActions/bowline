@@ -7,9 +7,9 @@
 ## Install Instructions
 
 ### New Drupal Project
-1. Clone this repo. `git clone git@github.com:davenuman/bowline.git myproject` Then `cd myprojecet`. (Change myproject to the name of your project.)
+1. Clone this repo. `git clone git@github.com:davenuman/bowline.git myproject` Then `cd myproject`. (Change myproject to the name of your project.)
 1. [Download and extract drupal](https://www.drupal.org/start) then move the drupal root directory to docroot. If you have drush installed you can do this:
-  - `drush dl drupal && drupal-* docroot`
+  - `drush dl drupal && mv drupal-* docroot`
 1. Install Drupal
  - `cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php`
   - `./scripts/build init` Append a require to the docker settings file.
