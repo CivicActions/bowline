@@ -41,6 +41,14 @@ case "$1" in
     # Import snapshot of database
     docker exec -it $container /var/www/scripts/import
     ;;
+  selenium)
+    echo "# Starting selenium"
+    cd .docker/selenium
+    # Start the selenium containers
+    $FIG up -d --no-recreate
+    $FIG ps
+    exit 0
+    ;;
   *)
     echo "# BUILDING CONTAINERS"
     echo "Building without importing database. (Run as './scripts/build import' if you need to load the db.)"
