@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+BUILD_HELP[init]="Initialize the Drupal config"
+BUILD_HELP_DETAIL[init]="
+  ${BUILD_HELP[init]}
+"
+
+build_command_init () {
+  GREP=$(grep settings.docker.php $GIT_ROOT/docroot/sites/default/settings.php)
+  if [[ $GREP == "" ]]; then
+    echo "// Include file for docker database connection." >> $GIT_ROOT/docroot/sites/default/settings.php
+    echo "if (file_exists('/etc/settings.docker.php')) {" >> $GIT_ROOT/docroot/sites/default/settings.php
+    echo "  require '/etc/settings.docker.php';" >> $GIT_ROOT/docroot/sites/default/settings.php
+    echo "}" >> $GIT_ROOT/docroot/sites/default/settings.php
+    echo "Added require to settings.php"
+  fi
+  exit 0
+}

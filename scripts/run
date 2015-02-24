@@ -3,7 +3,14 @@
 # Make sure we are in the scripts directory.
 cd $(dirname $0)
 source include.bash
-[[ $FIG ]] || FIG=fig
+source lib/dispatch.sh
+declare -A RUN_HELP
+declare -A RUN_HELP_DETAIL
+for subcommand in subcommands/run_*
+  do source $subcommand
+done
+
+FIG=${FIG-fig}
 
 # If this isn't the docker container, call this script in the container.
 if [ $(pwd) != '/var/www/scripts' ]; then
@@ -15,25 +22,6 @@ if [ $(pwd) != '/var/www/scripts' ]; then
     container=$($FIG ps|grep web|grep -v Exit|awk '{print $1}')
   fi
   docker exec -it $container /var/www/scripts/run $@
-  exit
-fi
-
-
-#### Pre-flight checks.
-if [ $1 = "pre-flight" ]; then
-  echo "# Pre-flight checks"
-
-  ## 1: Check database.
-  table_count=$(mysql -hdbhost -udbuser -pdbpass drupal -ss -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = 'drupal'")
-  if [ $table_count = "0" ]; then
-    echo "ERROR: Database empty."
-    exit 1
-  fi
-  echo "Table count: ${table_count}"
-
-  ## 2. Drush
-  # @TODO.
-  echo "PASS"
   exit
 fi
 
@@ -57,24 +45,8 @@ echo "Cleaning up previous test results."
 rm -fv logs/xml/TEST*.xml
 PROGRESS_LOG='logs/progress.log'
 
-case "$1" in
-  full)
-    echo "# Running full test suite"
-    ./vendor/behat/behat/bin/behat -f pretty,progress,junit --out ,${PROGRESS_LOG},logs/xml -c tests/behat/smoke.yml
-    ;;
-  headless)
-    echo "# Running headless test suite"
-    echo "@TODO"
-    ;;
-  smoke)
-    echo "# Running smoke tests"
-    ./vendor/behat/behat/bin/behat -f pretty,progress,junit --out ,${PROGRESS_LOG},logs/xml --tags=@smoke -c tests/behat/smoke.yml
-    ;;
-  *)
-    echo "# Running $1 tests"
-    ./vendor/behat/behat/bin/behat -f pretty,progress,junit --out ,${PROGRESS_LOG},logs/xml --tags=@smoke -c tests/behat/smoke.yml
-    ;;
-esac
+# Dispatch the arguments
+dispatch run "$@"
 
 EXIT=$?
 echo -e "\033[m"

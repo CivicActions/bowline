@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+BUILD_HELP[import]="Import the .snapshot.sql.gz file into the database container."
+BUILD_HELP_DETAIL[import]="
+  ${BUILD_HELP[import]}
+"
+
+build_command_import () {
+  if [ "$1" ]; then
+    local subcommand=$1
+    echo "${subcommand}::${BUILD_HELP_DETAIL[${subcommand}]}" | column -t -s "::"
+    exit 0
+  fi
+
+  cd scripts/subcommands
+  for subcommand in $(ls build_*); do
+    echo "${subcommand:6}::${BUILD_HELP[${subcommand:6}]}"
+  done | column -t -s "::"
+
+  exit 0
+}

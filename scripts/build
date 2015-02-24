@@ -2,37 +2,16 @@
 
 cd $(dirname $0)/..
 source scripts/include.bash
-[[ $FIG ]] || FIG=fig
+source scripts/lib/dispatch.sh
+declare -A BUILD_HELP
+declare -A BUILD_HELP_DETAIL
+for subcommand in scripts/subcommands/build_*
+  do source $subcommand
+done
+
+FIG=${FIG-fig}
 
 case "$1" in
-  destroy)
-    echo "Destroy: This action includes removing the database container and its Drupal database."
-    echo "Are you sure you want to stop and remove the containers for this project [Y/n]?"
-    read confirm;
-    [[ $confirm == 'n' ]] && exit 1;
-    $FIG stop; $FIG rm # press y to remove containers
-    echo "Do you also want to remove the docker images [Y/n]?"
-    read confirm;
-    [[ $confirm == 'n' ]] && exit 1;
-    docker rmi --no-prune=true ${SLUG}_web
-    exit 0;
-    ;;
-  sync-db)
-    echo "# Syncing snapshot (not imported to container)"
-    rsync -P user@example.com:latest/snapshot.sql.gz .snapshot.sql.gz
-    exit 0;
-    ;;
-  init)
-    GREP=$(grep settings.docker.php $GIT_ROOT/docroot/sites/default/settings.php)
-    if [[ $GREP == "" ]]; then
-      echo "// Include file for docker database connection." >> $GIT_ROOT/docroot/sites/default/settings.php
-      echo "if (file_exists('/etc/settings.docker.php')) {" >> $GIT_ROOT/docroot/sites/default/settings.php
-      echo "  require '/etc/settings.docker.php';" >> $GIT_ROOT/docroot/sites/default/settings.php
-      echo "}" >> $GIT_ROOT/docroot/sites/default/settings.php
-      echo "Added require to settings.php"
-    fi
-    exit
-    ;;
   import)
     echo "# BUILDING CONTAINERS"
     # Start containers, build if necessary.
@@ -41,15 +20,9 @@ case "$1" in
     # Import snapshot of database
     docker exec -it $container /var/www/scripts/import
     ;;
-  selenium)
-    echo "# Starting selenium"
-    cd .docker/selenium
-    # Start the selenium containers
-    $FIG up -d --no-recreate
-    $FIG ps
-    exit 0
-    ;;
   *)
+    # Dispatch the arguments
+    dispatch build "$@"
     echo "# BUILDING CONTAINERS"
     echo "Building without importing database. (Run as './scripts/build import' if you need to load the db.)"
     # Start containers, build if necessary.
@@ -82,3 +55,5 @@ echo "  If the above link does not work and you are using Boot2Docker,"
 echo "  run the following command then try the link again."
 echo "      sudo route -n add 172.17.0.0/16 192.168.59.103"
 echo ""
+
+

@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+run_command_ () {
+  echo "# Running $1 tests"
+  ./vendor/behat/behat/bin/behat -f pretty,progress,junit --out ,${PROGRESS_LOG},logs/xml --tags=@smoke -c tests/behat/smoke.yml
+}
+
+RUN_HELP[full]="Run full behat tests"
+RUN_HELP_DETAIL[full]=" ${RUN_HELP[full]} "
+run_command_full () {
+  echo "# Running full test suite"
+  ./vendor/behat/behat/bin/behat -f pretty,progress,junit --out ,${PROGRESS_LOG},logs/xml -c tests/behat/smoke.yml
+}
+
+RUN_HELP[headless]="Run headless behat tests"
+RUN_HELP_DETAIL[headless]=" ${RUN_HELP[headless]} "
+run_command_headless () {
+  echo "# Running headless test suite"
+  echo "@TODO"
+}
+
+
+RUN_HELP[smoke]="Run smoke behat tests"
+RUN_HELP_DETAIL[smoke]=" ${RUN_HELP[smoke]} "
+run_command_smoke () {
+  echo "# Running smoke tests"
+  ./vendor/behat/behat/bin/behat -f pretty,progress,junit --out ,${PROGRESS_LOG},logs/xml --tags=@smoke -c tests/behat/smoke.yml
+}

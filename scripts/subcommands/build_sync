@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+BUILD_HELP[syncdb]="Uses rsync to download a project database snapshot."
+BUILD_HELP_DETAIL[syncdb]=" ${BUILD_HELP[syncdb]} "
+
+build_command_syncdb () {
+  echo "# Syncing snapshot (not imported to container)"
+  # Edit the following to your project.
+  echo example: rsync -P user@example.com:latest/snapshot.sql.gz .snapshot.sql.gz
+  exit 0
+}
+
+BUILD_HELP[syncfiles]="Uses rsync to download project files."
+BUILD_HELP_DETAIL[syncfiles]=" ${BUILD_HELP[syncfiles]} "
+
+build_command_syncfiles () {
+  echo "# Syncing files"
+  # Edit the following to your project.
+  echo example: rsync -P user@example.com:files-private files-private
+  exit 0
+}
