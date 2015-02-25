@@ -16,7 +16,7 @@ RUN ln -sf /bin/true /sbin/initctl
 RUN apt-get update && \
   apt-get -y install git mysql-client apache2 libapache2-mod-php5 wget curl \
     php5-curl php5-gd php5-mysql php5-sqlite php5-pgsql php-apc php-pear php-codesniffer \
-    pwgen sudo python-setuptools nano apt-utils tidy vim && \
+    pwgen sudo python-setuptools nano apt-utils tidy vim pv && \
   apt-get autoclean && apt-get autoremove
 
 # whitelist = phar

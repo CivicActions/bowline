@@ -38,5 +38,5 @@ $MYSQL -ss -e 'SELECT concat("DROP TABLE `", TABLE_NAME, "`;") FROM information_
 
 # Import.
 # @TODO: check for the file first.
-zcat .snapshot.sql.gz | $MYSQL
+pv .snapshot.sql.gz | gunzip | $MYSQL
 
