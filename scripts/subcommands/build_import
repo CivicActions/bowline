@@ -6,16 +6,10 @@ BUILD_HELP_DETAIL[import]="
 "
 
 build_command_import () {
-  if [ "$1" ]; then
-    local subcommand=$1
-    echo "${subcommand}::${BUILD_HELP_DETAIL[${subcommand}]}" | column -t -s "::"
-    exit 0
-  fi
-
-  cd scripts/subcommands
-  for subcommand in $(ls build_*); do
-    echo "${subcommand:6}::${BUILD_HELP[${subcommand:6}]}"
-  done | column -t -s "::"
-
-  exit 0
+  echo "# BUILDING CONTAINERS"
+  # Start containers, build if necessary.
+  $FIG up -d --no-recreate
+  container=$($FIG ps|grep web|awk '{print $1}')
+  # Import snapshot of database
+  docker exec -it $container /var/www/scripts/import
 }

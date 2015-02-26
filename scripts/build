@@ -11,25 +11,15 @@ done
 
 FIG=${FIG-fig}
 
-case "$1" in
-  import)
-    echo "# BUILDING CONTAINERS"
-    # Start containers, build if necessary.
-    $FIG up -d --no-recreate
-    container=$($FIG ps|grep web|awk '{print $1}')
-    # Import snapshot of database
-    docker exec -it $container /var/www/scripts/import
-    ;;
-  *)
-    # Dispatch the arguments
-    dispatch build "$@"
-    echo "# BUILDING CONTAINERS"
-    echo "Building without importing database. (Run as './scripts/build import' if you need to load the db.)"
-    # Start containers, build if necessary.
-    $FIG up -d --no-recreate
-    container=$($FIG ps|grep web|awk '{print $1}')
-    ;;
-esac
+
+# Dispatch the arguments
+dispatch build "$@"
+
+echo "# BUILDING CONTAINERS"
+echo "Building without importing database. (Run as './scripts/build import' if you need to load the db.)"
+# Start containers, build if necessary.
+$FIG up -d --no-recreate
+container=$($FIG ps|grep web|awk '{print $1}')
 
 # Set up composer.
 docker exec -it $container composer self-update

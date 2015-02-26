@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-run_command_ () {
+run_ () {
   echo "# Running $1 tests"
   ./vendor/behat/behat/bin/behat -f pretty,progress,junit --out ,${PROGRESS_LOG},logs/xml --tags=@smoke -c tests/behat/smoke.yml
 }
