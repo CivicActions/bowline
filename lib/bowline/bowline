@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+# check if we're on the host
+# running_in_docker() { awk -F/ '$2 == "docker"' /proc/self/cgroup | read; }
+[ "$(grep docker /proc/self/cgroup)" ] && export context="container" || export context="host"
+
+get_container_name () { echo "${SLUG}_${1}_1"; }
+
+# Set basic env variables.
+bowline_init () {
+  GIT_ROOT=$(git rev-parse --show-toplevel)
+  BOWLINE=${GIT_ROOT##*/}
+  GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  SLUG=${BOWLINE//-/}  # Fig doesn't allow the - char.
+  SLUG=${BOWLINE//_/}  # Fig doesn't allow the _ char.
+  FIG="fig"  # Add command options here.
+
+  cd $GIT_ROOT
+
+  ### @@ Note, everytime the ip changes the following should run
+  # Add some useful container env
+  fig_containers=$(grep '^\S*:' fig.yml)
+  containers=""
+  for c in $fig_containers; do
+    name="${c%:}"
+    container_name="$(get_container_name ${name})"
+    # Set variables such as $web and $db from the fig.yml.
+    export ${name}=${container_name}
+    # Set IP addresses if they are available.
+    export "${name}_ip"="$(docker inspect --format='{{.NetworkSettings.IPAddress}}' ${container_name})"
+    export containers="${containers} ${name}"
+  done
+}
+
+[ $context = "host" ] && bowline_init
+
+
+assert_running () {
+  local cn=$(get_container_name web)
+  RUNNING=$(docker inspect --format="{{ .State.Running }}" ${cn} 2> /dev/null)
+  [ "$RUNNING" = "true" ] || $FIG up -d --no-recreate
+}
+
+assert_composer () {
+  if [ ! -d "vendor" ];then
+    echo "Setting up Composer...."
+    docker exec -it ${web} composer self-update
+    docker exec -it ${web} composer --working-dir=/var/www install
+    docker exec -it ${web} chown -R www-data /var/www/vendor
+  fi
+}
+
+enter_container () {
+  if [ $context = "container" ];then
+    cd /var/www
+    return
+  fi
+  assert_running
+  docker exec -it $(get_container_name web) /var/www/bin/$(basename $0) $@
+  EXIT=$?
+  echo Exit Status: $EXIT
+  exit $EXIT
+}
+
+bowline () {
+  echo "Available commands: $(ls bin)" | tr '\n' ' ' | sed 's/activate//'
+  echo ""
+  echo "Containers: "
+  for c in $containers;do
+    ip_var="${c}_ip"
+    echo "$c::${!ip_var}"
+  done | column -t -s "::"
+}

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+enter_container
+
+#### The run steps.
+echo -e "\033[32m# RUNNING TESTS\033[m"
+
+# Check Drush.
+cd docroot
+echo -e "\033[34mdrush status:"
+../vendor/bin/drush st
+echo -e "\033[m"
+cd ..
+
+# Run tests.
+echo -e "\033[32mRunning tests\033[m"
+echo "Cleaning up previous test results."
+rm -fv logs/xml/TEST*.xml
