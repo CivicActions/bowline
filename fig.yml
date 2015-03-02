@@ -15,7 +15,7 @@ db:
     - 8.8.8.8
     - 8.8.4.4
 web:
-  image: davenuman/drupal:php-5.4
+  image: davenuman/bowline-web-php:latest
   command: /start.sh
   environment:
     - COMPOSER_HOME=/.composer
