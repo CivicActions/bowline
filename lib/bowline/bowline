@@ -71,7 +71,7 @@ enter_container () {
 
 bowline () {
   bowline_init
-  echo -e "Available commands:\033[32m $(ls bin)" | tr '\n' ' ' | sed 's/activate//'
+  echo -e "Available commands:\033[32m $(ls bin)" | tr '\n' ' ' | sed 's/activate/de&/'
   echo -e "\033[m"
   echo "Containers: "
   for c in $containers;do
