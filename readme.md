@@ -18,6 +18,7 @@
   - This will build the containers and can take a long time.
 1. Install Drupal and login:
   - `settings_init`
+  - `drush si --sites-subdir=default`
   - `drush uli` Get a login url.
 
 ### Existing Drupal Project
