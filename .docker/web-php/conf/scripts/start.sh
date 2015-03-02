@@ -3,7 +3,7 @@
 export PATH=$HOME/bin:$PATH
 
 # Create required directories just in case.
-mkdir -p /var/www/docroot/sites/default/files /var/www/logs /var/www/files-private
+mkdir -p /var/www/logs /var/www/files-private
 echo "*" > /var/www/logs/.gitignore
 echo "*" > /var/www/files-private/.gitignore
 
