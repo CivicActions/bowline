@@ -1,15 +1,7 @@
 #!/usr/bin/env bash
 
-# Make sure we are in the project root directory.
-cd $(dirname $0)/..
-source scripts/include.bash
-
-# If this isn't the docker container, call this script in the container.
-if [ $GIT_ROOT != '/var/www' ]; then
-  echo "This script should be run from inside the container."
-  echo "You probably want to try ./build import"
-  exit 1
-fi
+source $(dirname $0)/../lib/bowline/bowline
+enter_container $@
 
 # Wait for mysql connection.
 echo "NOTE: Please ignore any warnings about 'Connection refused' while waiting for the db service to start"

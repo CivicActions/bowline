@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+enter_container
+
+chown -R -c www-data:www-data /var/www
+
+echo "File permissions set to www-data:"
+id www-data
+exit 0

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+
+FILENAME=${GIT_ROOT}/.${GIT_BRANCH}.sql
+docker exec -it ${web} mysqldump --host=dbhost --user=dbuser --password=dbpass drupal > $FILENAME
+gzip $FILENAME
+
+echo ""
+echo "# BACKUP COMPLETE"
+echo "File saved as ${FILENAME}.gz"

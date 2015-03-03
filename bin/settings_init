@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+
+settingspath=$GIT_ROOT/docroot/sites/default
+
+if [ ! -d "${settingspath}" ];then
+  echo "Looks like Drupal isn't installed. Would you like to install it? [Y,n,7,8]"
+  read drupal
+  [ "${drupal,,}" = "n" ] && exit 1
+
+  # Install Drupal
+  version="drupal-7"
+  [ "${drupal}" = "8" ] && version="drupal-8"
+  drush dl --destination=/var/www $version
+  [ -d "docroot" ] && mv -v docroot old-docroot
+  mv -v drupal-* docroot
+fi
+
+if [ ! -f "${settingspath}/settings.php" ];then
+  cp -v ${settingspath}/default.settings.php ${settingspath}/settings.php
+fi
+
+if [ ! "$(grep settings.docker.php ${settingspath}/settings.php)" ]; then
+  echo "" >> ${settingspath}/settings.php
+  echo "// Include file for docker database connection." >> ${settingspath}/settings.php
+  echo "if (file_exists('/etc/settings.docker.php')) {" >> ${settingspath}/settings.php
+  echo "  require '/etc/settings.docker.php';" >> ${settingspath}/settings.php
+  echo "}" >> ${settingspath}/settings.php
+  echo "Added require to settings.php"
+else
+  echo "Docker settings file already required."
+fi
+exit 0

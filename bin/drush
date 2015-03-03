@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+assert_running
+assert_composer
+
+echo "Running 'drush $@' inside container."
+docker exec -it ${web} sudo -u www-data /var/www/vendor/drush/drush/drush --root=/var/www/docroot --uri=http://${web_ip} $@
+exit 0
