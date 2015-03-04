@@ -12,3 +12,11 @@ for c in $containers;do
   echo "$c,~,${!ip_var}${link}"
   unset link
 done | column -t -s ","
+
+echo "Proxy:"
+check_proxy
+if [ "$PROXY_HOST_SET" ];then
+  echo -e "\thttp://${BOWLINE}.localtest.me/"
+else
+  echo -e "\tNot active. (use 'invoke_proxy' to start)"
+fi

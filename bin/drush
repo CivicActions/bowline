@@ -5,5 +5,5 @@ assert_running
 assert_composer
 
 echo "Running 'drush $@' inside container."
-docker exec -it ${web} sudo -u www-data /var/www/vendor/drush/drush/drush --root=/var/www/docroot --uri=http://${web_ip} $@
+docker exec -it ${web} sudo -u www-data /var/www/vendor/drush/drush/drush --root=/var/www/docroot --uri=http://${BOWLINE}.localtest.me $@
 exit 0

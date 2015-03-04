@@ -29,6 +29,6 @@ if [ ! "$(grep settings.docker.php ${settingspath}/settings.php)" ]; then
   echo "}" >> ${settingspath}/settings.php
   echo "Added require to settings.php"
 else
-  echo "Docker settings file already required."
+  echo "Docker settings file already initialized."
 fi
 exit 0

@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+hostfile='/etc/althosts'
+
+ip=$1
+host=$2
+if [ ! "$host" ];then
+  echo "Usage: set_host ipaddr hostname"
+  exit 1
+fi
+
+# Remove existing line if present.
+[ -e "$hostfile" ] && sed -i "/\s${host}$/d" $hostfile
+
+# New file or append to existing.
+echo $ip $host >> $hostfile
+
+# Signal dnsmasq for change to take effect
+pid=$(pgrep dnsmasq)
+kill -HUP $pid

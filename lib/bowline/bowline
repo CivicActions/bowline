@@ -7,6 +7,14 @@ get_container_name () { echo "${SLUG}_${1}_1"; }
 
 check_build() { unset CONTAINERS_BUILT; [ "$(docker ps -a | grep ${SLUG}_web)" ] && CONTAINERS_BUILT="true"; }
 
+check_proxy() {
+  unset PROXY_RUNNING PROXY_HOST_SET;
+  if [ "$(docker ps -q -f name=proxy_)" ];then
+    PROXY_RUNNING="true";
+    PROXY_HOST_SET=$(docker exec proxy_dnsmasq_1 grep "\s${BOWLINE}$" /etc/althosts|grep "$web_ip\s")
+  fi
+}
+
 # Set basic env variables.
 bowline_init () {
   GIT_ROOT=$(git rev-parse --show-toplevel)
