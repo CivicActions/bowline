@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+if [ "$(basename ${0//-/})" = "activate" ];then
+  echo "ERROR: It looks like you are running this script directly. Instead, source this file to activate your bash session (note the '.'):"
+  echo " . bin/activate"
+  exit 1
+fi
 [ "$(alias | grep deactivate)" ] && deactivate  # In case already activated.
 GIT_ROOT=$(git rev-parse --show-toplevel)
 alias deactivate="export PATH=$PATH; export PS1=\"$PS1\"; unset BOWLINE bowline bowline_init"
