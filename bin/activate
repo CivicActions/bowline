@@ -1,14 +1,27 @@
 #!/usr/bin/env bash
-if [ "$(basename ${0//-/})" = "activate" ];then
-  echo "ERROR: It looks like you are running this script directly. Instead, source this file to activate your bash session (note the '.'):"
-  echo " . bin/activate"
-  exit 1
+if [ -n "$ZSH_VERSION" ]; then
+  SHELL_TYPE="zsh"
+elif [ -n "$BASH_VERSION" ]; then
+  SHELL_TYPE="bash"
+  if [ "$(basename ${0//-/})" = "activate" ];then
+    echo "ERROR: It looks like you are running this script directly. Instead, source this file to activate your shell session (note the '.'):"
+    echo " . bin/activate"
+    exit 1
+  fi
+else
+  echo "Error: unknown shell"; return
 fi
+
 [ "$(alias | grep deactivate)" ] && deactivate  # In case already activated.
 GIT_ROOT=$(git rev-parse --show-toplevel)
 alias deactivate="export PATH=$PATH; export PS1=\"$PS1\"; unset BOWLINE bowline bowline_init"
 export PATH=$GIT_ROOT/bin:$PATH
-export PS1="${PS1}\[\033[01;31m\](${BOWLINE})\[\033[00m\] \$ "
-source $GIT_ROOT/lib/bowline/bowline
+export BOWLINE=${GIT_ROOT##*/}
+
+if [ "$SHELL_TYPE" = "bash" ];then
+  export PS1="${PS1}\[\033[01;31m\](${BOWLINE})\[\033[00m\] \$ "
+else
+  export PS1="${PS1} (${BOWLINE}) \$ "
+fi
 
 echo "Bowline activated. Enter 'bowline' command to get started."

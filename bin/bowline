@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+
+echo -e "Available commands:\033[32m $(ls bin)" | tr '\n' ' ' | sed 's/activate/de&/'
+echo -e "\033[m"
+echo "Containers: "
+for c in $containers;do
+  ip_var="${c}_ip"
+  port_raw="$(docker inspect --format='{{.NetworkSettings.Ports}}' ${!c}|grep 80)"
+  [ "$port_raw" ] && link=",http://${!ip_var}/"
+  echo "$c,~,${!ip_var}${link}"
+  unset link
+done | column -t -s ","

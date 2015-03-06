@@ -27,7 +27,7 @@ bowline_init () {
     name="${c%:}"
     container_name="$(get_container_name ${name})"
     # Set variables such as $web and $db from the fig.yml.
-    export ${name}=${container_name}
+    export "${name}=${container_name}"
     # Set IP addresses if they are available.
     if [ "$CONTAINERS_BUILT" ];then
       local ip="$(docker inspect --format='{{.NetworkSettings.IPAddress}}' ${container_name})"
@@ -67,18 +67,4 @@ enter_container () {
   EXIT=$?
   echo Exit Status: $EXIT
   exit $EXIT
-}
-
-bowline () {
-  bowline_init
-  echo -e "Available commands:\033[32m $(ls bin)" | tr '\n' ' ' | sed 's/activate/de&/'
-  echo -e "\033[m"
-  echo "Containers: "
-  for c in $containers;do
-    ip_var="${c}_ip"
-    port_raw="$(docker inspect --format='{{.NetworkSettings.Ports}}' ${!c}|grep 80)"
-    [ "$port_raw" ] && link=",http://${!ip_var}/"
-    echo "$c,~,${!ip_var}${link}"
-    unset link
-  done | column -t -s ","
 }
