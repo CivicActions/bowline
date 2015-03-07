@@ -43,7 +43,7 @@ git remote update
 
 Check out the bowline code. This will stage the files in your current branch
 ```
-git checkout bowline/master
+git checkout bowline/master .
 ```
 It is possible though unlikely that this step modified some of your files. Check this with `git status` to see what is staged. Or more specifically, you can `git status -s|grep ^M` to list modified files. Feel free to correct these now if you like but you should be able to continue either way.
 
