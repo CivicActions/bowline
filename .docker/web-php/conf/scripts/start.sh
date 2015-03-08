@@ -12,6 +12,7 @@ OWNER=$(stat -c '%u' /var/www)
 GROUP=$(stat -c '%g' /var/www)
 usermod -o -u $OWNER www-data
 groupmod -o -g $GROUP www-data
+chown -R --silent www-data:www-data /var/www
 echo Using the following user for running apache:
 id www-data
 
