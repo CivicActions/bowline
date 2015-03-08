@@ -4,6 +4,9 @@ source $(dirname $0)/../lib/bowline/bowline
 assert_running
 assert_composer
 
-echo "Running 'drush $@' inside container."
-docker exec -it ${web} sudo -u www-data /var/www/vendor/drush/drush/drush --root=/var/www/docroot --uri=http://${BOWLINE}.localtest.me $@
+check_proxy
+[ "$PROXY_HOST_SET" ] && DRUSH_URI="http://${BOWLINE}.localtest.me" || DRUSH_URI="http://${web_ip}/"
+
+echo "Running 'drush $@' inside container, using uri: ${DRUSH_URI}"
+docker exec -it ${web} sudo -u www-data /var/www/vendor/drush/drush/drush --root=/var/www/docroot --uri=${DRUSH_URI} $@
 exit 0
