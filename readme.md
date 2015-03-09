@@ -7,6 +7,19 @@
 
 See also the [wiki](https://github.com/davenuman/bowline/wiki) for [platform-specific instructions](https://github.com/davenuman/bowline/wiki/Platform-specific-instructions).
 
+## Pre-install Preparations (Optional)
+If you prefer to do the heavy downloading ahead of time, run the following docker commands:
+```bash
+docker pull davenuman/bowline-web-php
+docker pull mysql:5.5
+```
+
+Also pull these if you plan to use the proxy for nice urls (recommended):
+```bash
+docker pull nginx
+docker pull devries/dnsmasq
+```
+
 ## Install Instructions
 
 ### New Drupal Project
