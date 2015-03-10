@@ -42,4 +42,4 @@ tests/behat/local.yml
 .drush
 
 # Composer
-vendor/*
+/vendor
