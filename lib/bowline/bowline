@@ -59,9 +59,10 @@ assert_running () {
 assert_composer () {
   if [ ! -d "vendor" ];then
     echo "Setting up Composer...."
-    docker exec -it ${web} composer self-update
-    docker exec -it ${web} composer --working-dir=/var/www install
-    docker exec -it ${web} chown -R www-data /var/www/vendor
+    docker exec -it ${web} chown -R www-data:www-data /var/www
+    docker exec -it ${web} chown www-data:www-data /usr/local/bin/composer.phar
+    docker exec -it ${web} sudo -u www-data composer --working-dir=/var/www self-update
+    docker exec -it ${web} sudo -u www-data composer --working-dir=/var/www install
   fi
 }
 
