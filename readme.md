@@ -23,10 +23,25 @@ docker pull devries/dnsmasq
 ## Install Instructions
 
 ### New Drupal Project
-Clone this repo. Change myproject to the name of your project:
+Start a new git repo then add bowline as a remote. Change myproject to the name of your project:
 ```bash
-git clone git@github.com:davenuman/bowline.git myproject
+mkdir myproject
 cd myproject
+git init
+git remote add bowline git@github.com:davenuman/bowline.git
+git remote update
+```
+
+Check out the bowline code. This will stage the files in your current branch
+```
+git checkout bowline/master .
+```
+
+Add and commit your new code. It is recommended to review the files staged before committing. For example:
+```bash
+git add . && git status
+git rm --cached readme.md	# You probably don't want this readme in your project.
+git commit -m 'Starting with bowline code'
 ```
 
 Activate bowline, adding the bowline environment to your bash session (The "dot space" is intentional, not a typo):
