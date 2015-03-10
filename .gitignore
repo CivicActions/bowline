@@ -43,3 +43,4 @@ tests/behat/local.yml
 
 # Composer
 /vendor
+/.composer
