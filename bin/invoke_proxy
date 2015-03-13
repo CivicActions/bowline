@@ -12,5 +12,8 @@ if [ ! "$PROXY_RUNNING" ];then
   cd $GIT_ROOT
 fi
 
-echo "# Setting host IP address"
+echo "# Setting host IP address..."
 docker exec proxy_dnsmasq_1 set_host $web_ip $BOWLINE
+echo "# done."
+
+bowline

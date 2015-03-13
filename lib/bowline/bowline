@@ -24,7 +24,7 @@ bowline_init () {
   BOWLINE=${GIT_ROOT##*/}
   GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
   SLUG=${BOWLINE//-/}  # Fig doesn't allow the - char.
-  SLUG=${BOWLINE//_/}  # Fig doesn't allow the _ char.
+  SLUG=${SLUG//_/}  # Fig doesn't allow the _ char.
   FIG="fig"  # Add command options here.
 
   cd $GIT_ROOT

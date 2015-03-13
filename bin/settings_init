@@ -11,7 +11,11 @@ if [ ! -d "${settingspath}" ];then
 
   # Install Drupal
   version="drupal-7"
-  [ "${drupal}" = "8" ] && version="drupal-8"
+  if [ "${drupal}" = "8" ];then
+    version="drupal-8"
+    # Install Drush 7
+    composer global require drush/drush:dev-master
+  fi
   drush dl --destination=/var/www $version
   [ -d "docroot" ] && mv -v docroot old-docroot
   mv -v drupal-* docroot
@@ -31,4 +35,7 @@ if [ ! "$(grep settings.docker.php ${settingspath}/settings.php)" ]; then
 else
   echo "Docker settings file already initialized."
 fi
+
+echo -ne "Hint: If you would like to perform a fresh site install, run this:\n\tdrush si --sites-subdir=default\n\n"
+
 exit 0

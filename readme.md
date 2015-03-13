@@ -95,7 +95,7 @@ settings_init
 drush uli # Get a login url.
 ```
 
-## Docker subnet proxy for nice URLs
+## Docker subnet proxy for domain names as well as IP addresses
 You may have noticed when running the `bowline` command that there is a section called "Proxy". As it suggests, run the following command to activate the proxy:
 ``` bash
 invoke_proxy
@@ -105,6 +105,8 @@ This will create and start an nginx container linked to a dnsmasq container. Aft
 bowline
 drush st
 ```
+
+**Important:** the nginx proxy will not start if you have something else using port 80. You must either stop your other service (recommended) or edit the port in `lib/proxy/fig.yml` file to something other than 80.
 
 ## Post-Install: Test and document your development sandbox
 1. Review [sandbox.md](sandbox.md ) which is indented to become your instructions for your development team. It will need to be modified to the specifics of your project.
