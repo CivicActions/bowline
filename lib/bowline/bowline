@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 # check if we're on the host
-[ "$(grep docker /proc/self/cgroup)" ] && export context="container" || export context="host"
+if [ -e "/proc/self/cgroup" ];then
+  [ "$(grep docker /proc/self/cgroup)" ] && export context="container"
+fi
+[ "$context" ] || export context="host"
 
 get_container_name () { echo "${SLUG}_${1}_1"; }
 
