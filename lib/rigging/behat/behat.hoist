@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+assert_composer
+composer require drupal/drupal-extension:~3.0
+
+echo "Installing default tests"
+cp -av lib/rigging/behat/tests .
+
+echo "Installing behat script"
+cp -av lib/rigging/behat/bin/* bin
