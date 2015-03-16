@@ -6,6 +6,9 @@ if [ "${answer,,}" = "n" ];then
   exit
 fi
 
+# Make sure we have latest drush for D8.
+composer global require drush/drush:dev-master
+
 [ -e docroot ] && mv -v docroot docroot.backup-$$
 git clone --branch 8.0.x http://git.drupal.org/project/drupal.git docroot
 
