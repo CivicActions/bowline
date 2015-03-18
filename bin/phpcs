@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+assert_running
+
+# Make sure Drupal sniffer is installed
+if [ ! "$(docker exec -it ${web} sudo -iu www-data /var/www/vendor/bin/phpcs --config-show)" ];then
+  docker exec -it ${web} sudo -iu www-data /var/www/vendor/bin/phpcs \
+    --config-set installed_paths /var/www/vendor/drupal/coder/coder_sniffer -v
+fi
+
+docker exec -it ${web} sudo -iu www-data /var/www/vendor/bin/phpcs "$@"

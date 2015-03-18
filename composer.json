@@ -3,6 +3,6 @@
   "description": "The Project.",
   "require": {
     "drush/drush": "6.*",
-    "squizlabs/php_codesniffer": "*"
+    "drupal/coder": "~8.2"
   }
 }
