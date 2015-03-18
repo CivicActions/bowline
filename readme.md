@@ -111,3 +111,13 @@ drush st
 ## Post-Install: Test and document your development sandbox
 1. Review [sandbox.md](sandbox.md ) which is indented to become your instructions for your development team. It will need to be modified to the specifics of your project.
 1. Replace the content of this readme.md file with appropriate description of your project.
+
+## Updating Bowline
+The intention for typical usage of Bowling is to set up this repository as a secondary git remote. If you followed these instructions, the remote is called bowline. (You can add whatever is appropriate for your project as the origin remote.)
+
+If you would like to pull in the latest Bowline code you basically just need to update the bin and lib directories.This can be done with the following command:
+```bash
+git checkout bowline/master -- bin lib
+```
+
+Then review the change and commit the update and push to your project.
