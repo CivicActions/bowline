@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+echo "# Pulling devtools image"
+docker pull davenuman/bowline-devtools
+
+echo "# Installing scripts"
+cp -av lib/rigging/devtools/bin/* bin

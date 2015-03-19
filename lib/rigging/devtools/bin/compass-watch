@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+assert_running
+
+[ "$1" ] || { echo "Usage: $0 path/to/theme"; exit; }
+
+docker run -ti --rm -v ${GIT_ROOT}/${1}:/data davenuman/bowline-devtools compass watch
