@@ -5,3 +5,8 @@ docker pull davenuman/bowline-devtools
 
 echo "# Installing scripts"
 cp -av lib/rigging/devtools/bin/* bin
+
+echo "# Adding config"
+echo "devtools:" >> fig.yml
+echo "  image: davenuman/bowline-devtools" >> fig.yml
+echo "  command: /usr/local/bin/node devtools.js" >> fig.yml
