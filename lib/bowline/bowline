@@ -26,6 +26,7 @@ bowline_init () {
   SLUG=${BOWLINE//-/}  # Fig doesn't allow the - char.
   SLUG=${SLUG//_/}  # Fig doesn't allow the _ char.
   FIG="fig"  # Add command options here.
+  [ "$(command -v docker-compose)" ] && FIG="docker-compose"
 
   cd $GIT_ROOT
 
