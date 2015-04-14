@@ -21,6 +21,7 @@ web:
     - COMPOSER_HOME=/.composer
   expose:
     - "80"
+    - "9000"
   volumes:
     - .:/var/www
   links:

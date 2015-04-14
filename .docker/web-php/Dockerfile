@@ -15,7 +15,7 @@ RUN ln -sf /bin/true /sbin/initctl
 # Packages.
 RUN apt-get update && \
   apt-get -y install git mysql-client apache2 libapache2-mod-php5 wget curl \
-    php5-curl php5-gd php5-mysql php5-sqlite php5-pgsql php-apc php-pear php-codesniffer \
+    php5-curl php5-gd php5-mysql php5-sqlite php5-pgsql php-apc php-pear php5-xdebug \
     pwgen sudo python-setuptools nano apt-utils tidy vim pv && \
   apt-get autoclean && apt-get autoremove
 
@@ -52,7 +52,7 @@ ADD ./conf/php5/apc.ini /etc/php5/conf.d/apc.ini
 # Drupal.
 ADD ./conf/drupal/settings.docker.php /etc/settings.docker.php
 
-EXPOSE 80
+EXPOSE 80 9000
 
 # Start apache.
 RUN chmod 755 /start.sh
