@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+assert_running
+
+cmd='bash'
+[[ "$@" ]] && cmd=$@
+
+echo "Running '${cmd}' inside container"
+docker exec -it ${web} sudo -iu www-data ${cmd}

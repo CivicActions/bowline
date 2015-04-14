@@ -20,6 +20,7 @@ check_proxy() {
 
 # Set basic env variables.
 bowline_init () {
+  cd $(dirname $0)
   GIT_ROOT=$(git rev-parse --show-toplevel)
   BOWLINE=${GIT_ROOT##*/}
   GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
