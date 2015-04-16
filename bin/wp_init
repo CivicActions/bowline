@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+
+echo "Overwriting wp-config.php with a docker-ready version."
+cp -v $GIT_ROOT/.docker/web-php/conf/wp/wp-config.docker.php $GIT_ROOT/docroot/wp-config.php
