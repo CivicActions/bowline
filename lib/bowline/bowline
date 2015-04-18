@@ -30,12 +30,13 @@ bowline_init () {
   if [ ! "$(command -v docker-compose)" ];then
     if [ "$(command -v fig)" ];then
       echo "Using fig which is deprecated and replaced with docker-compose."
+      echo "https://docs.docker.com/compose/install/"
       DCOMPOSE="fig -f docker-compose.yml"
     else
       echo "Docker Compose is required for using Bowline"
+      echo "https://docs.docker.com/compose/install/"
       exit 1
     fi
-    echo "https://docs.docker.com/compose/install/"
   fi
 
   cd $GIT_ROOT
