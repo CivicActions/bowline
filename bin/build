@@ -3,7 +3,7 @@
 source $(dirname $0)/../lib/bowline/bowline
 
 echo "# STARTING CONTAINERS"
-$FIG up -d --no-recreate
+$DCOMPOSE up -d --no-recreate
 
 EXIT=$?
 echo -e "\033[m Exit Status: $EXIT"

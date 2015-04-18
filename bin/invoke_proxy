@@ -7,8 +7,8 @@ if [ ! "$PROXY_RUNNING" ];then
   echo "# Starting nginx proxy"
   cd lib/proxy
   # Start the proxy containers
-  $FIG up -d --no-recreate
-  $FIG ps
+  $DCOMPOSE up -d --no-recreate
+  $DCOMPOSE ps
   cd $GIT_ROOT
 fi
 

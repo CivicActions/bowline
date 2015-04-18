@@ -24,22 +24,31 @@ bowline_init () {
   GIT_ROOT=$(git rev-parse --show-toplevel)
   BOWLINE=${GIT_ROOT##*/}
   GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-  SLUG=${BOWLINE//-/}  # Fig doesn't allow the - char.
-  SLUG=${SLUG//_/}  # Fig doesn't allow the _ char.
-  FIG="fig"  # Add command options here.
-  [ "$(command -v docker-compose)" ] && FIG="docker-compose"
+  SLUG=${BOWLINE//-/}  # Fig/Compose doesn't allow the - char.
+  SLUG=${SLUG//_/}  # Fig/Compose doesn't allow the _ char.
+  DCOMPOSE="docker-compose"
+  if [ ! "$(command -v docker-compose)" ];then
+    if [ "$(command -v fig)" ];then
+      echo "Using fig which is deprecated and replaced with docker-compose."
+      DCOMPOSE="fig -f docker-compose.yml"
+    else
+      echo "Docker Compose is required for using Bowline"
+      exit 1
+    fi
+    echo "https://docs.docker.com/compose/install/"
+  fi
 
   cd $GIT_ROOT
 
   ### @@ Note, everytime the ip changes the following should run
   # Add some useful container env
   check_build
-  fig_containers=$(grep '^\S*:' fig.yml)
+  list_containers=$(grep '^\S*:' docker-compose.yml)
   unset containers
-  for c in $fig_containers; do
+  for c in $list_containers; do
     name="${c%:}"
     container_name="$(get_container_name ${name})"
-    # Set variables such as $web and $db from the fig.yml.
+    # Set variables such as $web and $db from the docker-compose.yml.
     export "${name}=${container_name}"
     # Set IP addresses if they are available.
     if [ "$CONTAINERS_BUILT" ];then
@@ -58,7 +67,7 @@ bowline_init () {
 assert_running () {
   local cn=$(get_container_name web)
   RUNNING=$(docker inspect --format="{{ .State.Running }}" ${cn} 2> /dev/null)
-  [ "$RUNNING" = "true" ] || $FIG up -d --no-recreate
+  [ "$RUNNING" = "true" ] || $DCOMPOSE up -d --no-recreate
 }
 
 assert_composer () {
