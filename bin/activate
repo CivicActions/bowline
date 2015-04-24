@@ -24,4 +24,4 @@ else
   export PS1="${PS1} (${BOWLINE}) \$ "
 fi
 
-echo "Bowline activated. Enter 'bowline' command to get started."
+echo "Bowline activated. Enter 'bowline' command for basic information"
