@@ -126,7 +126,7 @@ Then review the change and commit the update and push to your project.
 
 Bowline aims to be a general purpose tool while also allowing for any project specific needs. The [hoist](bin/hoist) command helps to allow for many features yet keep simplicity for less involved projects. The word "hoist" is playing on the sailing term, suggesting that you would use the appropriate rigging depending on the direction you are heading.
 
-**Using Hoist**
+### Using Hoist
 After activating, running the `hoist` command will output something similar to this:
 ```bash
 Usage: hoist [rigging]
@@ -141,7 +141,7 @@ hoist behat
 
 Thus, you can easily install the pieces you need for your project. Each hoisting is logged in logs/rigging
 
-**Creating a Rigging**
+### Creating a Rigging
 Riggings are simply a directory with a rigging_name.hoist bash script. A good example is the [behat rigging](lib/rigging/behat). The [behat.hoist](lib/rigging/behat/behat.hoist) script runs a composer command and copies a file to the bin directory, which may be typical processes of other possible riggings.
 
 

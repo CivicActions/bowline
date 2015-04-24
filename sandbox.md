@@ -5,7 +5,7 @@
 - [Docker 1.3+](https://docs.docker.com/installation/)
   - Docker service running.
   - Able to run docker command without sudo. (Need to fix this.)
-- [Fig 1.0.0+](http://www.fig.sh/install.html)
+- [Docker Compose](http://docs.docker.com/compose/)
 - [Composer](https://getcomposer.org/) (optional)
 - A `workspace` directory in your home directory
 
@@ -49,7 +49,7 @@ Docker creates virtual instances of Linux on your local machine, and this next s
 - If you like, you can stop the container when done:
 
 ```bash
-fig stop
+docker-compose stop
 ```
 
 - Restart with:
@@ -65,10 +65,10 @@ fig stop
 ./scripts/run
 ```
 
-### Using drush and fig
+### Using drush and docker-compose
 
 Drush won't work as configured with your containers. We've created a workaround command for using drush commands inside docker containers called "crush". NOTE: this step will need to be repeated each time you start a new bash session
-If you would like to use `drush` and `fig` commands on the newly built containers, source the bash include file:
+If you would like to use `drush` and `docker-compose` commands on the newly built containers, source the bash include file:
 
 ``` bash
 source scripts/include.bash
