@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+assert_composer
+composer require phpunit/phpunit:4.5.*
+
+echo "# Installing phpunit script"
+cp -av lib/rigging/phpunit/bin/* bin
+

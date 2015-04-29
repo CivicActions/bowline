@@ -3,7 +3,6 @@
   "description": "The Project.",
   "require": {
     "drush/drush": "6.*",
-    "drupal/coder": "~8.2",
-    "phpunit/phpunit": "4.5.*"
+    "drupal/coder": "~8.2"
   }
 }
