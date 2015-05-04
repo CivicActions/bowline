@@ -74,6 +74,7 @@ git remote update
 Check out the bowline code. This will stage the files in your current branch
 ```
 git checkout bowline/master .
+git rm --cached readme.md	# You probably don't want this readme in your project.
 ```
 It is possible though unlikely that this step modified some of your files. Check this with `git status` to see what is staged. Or more specifically, you can `git status -s|grep ^M` to list modified files. Feel free to correct these now if you like but you should be able to continue either way.
 
@@ -92,7 +93,23 @@ This will build the containers and can take a long time.
 Add docker setting to Drupal's settings.php file:
 ```
 settings_init
+```
+
+Get a snapshot of your current site's database and rename it to `.snapshot.sql.gz` then import it:
+```
+import
+```
+
+When that is complete you can proceed with appropriate drush commands such as this:
+
+```
+drush st
 drush uli # Get a login url.
+```
+
+And finally if it all looks good, commit the code to your repo:
+```
+git commit -m 'Adding bowline code'
 ```
 
 ## Docker subnet proxy for domain names as well as IP addresses

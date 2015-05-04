@@ -7,4 +7,6 @@ $DCOMPOSE up -d --no-recreate
 
 EXIT=$?
 echo -e "\033[m Exit Status: $EXIT"
+
+bowline
 exit $EXIT
