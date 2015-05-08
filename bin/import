@@ -19,11 +19,14 @@ MY_ARGS="--host=dbhost --user=dbuser --password=dbpass drupal"
 MYSQL="mysql $MY_ARGS"
 
 # Backup first.
-echo "# Backing up current database before importing."
-FILENAME=.pre-import.sql
-mysqldump $MY_ARGS > $FILENAME
-gzip -f $FILENAME
-echo "Database snapshot saved as ${FILENAME}.gz before running import."
+if [ "$1" == "--nobackup" ]; then
+  echo "# Not making a backup!"
+else
+  echo "# Backing up current database before importing."
+  FILENAME=.pre-import.sql.gz
+  mysqldump $MY_ARGS | gzip -c > $FILENAME
+  echo "Database snapshot saved as ${FILENAME} before running import."
+fi
 
 # Drop all tables.
 $MYSQL -ss -e 'SELECT concat("DROP TABLE `", TABLE_NAME, "`;") FROM information_schema.tables WHERE table_schema="drupal"'|$MYSQL
