@@ -2,7 +2,8 @@
 
 echo "Ready to git clone drupal [Y/n]?"
 read answer
-if [ "${answer,,}" = "n" ];then
+answer="$(echo ${answer} | tr 'A-Z' 'a-z')"
+if [ "${answer}" = "n" ];then
   exit
 fi
 
