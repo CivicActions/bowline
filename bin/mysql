@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+assert_running
+
+cmd='mysql'
+
+echo "Running '${cmd}' inside container"
+docker exec -it ${web} mysql --host=dbhost --user=dbuser --password=dbpass drupal
