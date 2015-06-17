@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+
+echo "Destroy: This action includes removing the database container and its Drupal database."
+echo "Consider running backup first to export the database."
+echo "Are you sure you want to stop and remove the containers for this project [Y/n]?"
+read confirm;
+[[ $confirm == 'n' ]] && exit 1;
+
+check_proxy
+if [ "$PROXY_RUNNING" ];then
+  echo "Removing proxy containers"
+  cd lib/proxy
+  $DCOMPOSE stop
+  $DCOMPOSE rm -fv
+  cd $GIT_ROOT
+fi
+
+$DCOMPOSE stop
+$DCOMPOSE rm -fv
+
+exit 0;
+;;
