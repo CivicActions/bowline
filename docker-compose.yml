@@ -16,7 +16,7 @@ db:
     - 8.8.4.4
 web:
   image: davenuman/bowline-web-php:latest
-  command: /start.sh
+  command: /usr/sbin/apache2 -D FOREGROUND
   environment:
     - COMPOSER_HOME=/.composer
   expose:
@@ -24,6 +24,7 @@ web:
     - "9000"
   volumes:
     - .:/var/www
+  entrypoint: /var/www/lib/bowline/docker-entrypoint.sh
   links:
     - db:dbhost
   hostname: drupal

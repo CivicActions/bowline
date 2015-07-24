@@ -1,0 +1,3 @@
+# Docker bash sourced file
+
+source /etc/apache2/envvars
