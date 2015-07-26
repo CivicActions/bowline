@@ -35,12 +35,13 @@ ehthumbs.db
 Icon?
 Thumbs.db
 
+# Composer
+/vendor
+/.composer
+
 # Other #
 #########
 tests/behat/local.yml
 *.sass-cache
 .drush
-
-# Composer
-/vendor
-/.composer
+.bash_history
