@@ -27,10 +27,11 @@ if [ ! -f "${settingspath}/settings.php" ];then
 fi
 
 if [ ! "$(grep settings.docker.php ${settingspath}/settings.php)" ]; then
+  chmod +w ${settingspath}/settings.php
   echo "" >> ${settingspath}/settings.php
   echo "// Include file for docker database connection." >> ${settingspath}/settings.php
-  echo "if (file_exists('/etc/settings.docker.php')) {" >> ${settingspath}/settings.php
-  echo "  require '/etc/settings.docker.php';" >> ${settingspath}/settings.php
+  echo "if (file_exists('/var/www/.docker/etc/settings.docker.php')) {" >> ${settingspath}/settings.php
+  echo "  require '/var/www/.docker/etc/settings.docker.php';" >> ${settingspath}/settings.php
   echo "}" >> ${settingspath}/settings.php
   echo "Added require to settings.php"
 else

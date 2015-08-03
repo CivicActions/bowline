@@ -21,7 +21,6 @@ web:
     - COMPOSER_HOME=/.composer
   expose:
     - "80"
-    - "9000"
   volumes:
     - .:/var/www
   entrypoint: /var/www/lib/bowline/docker-entrypoint.sh
