@@ -49,9 +49,6 @@ ADD ./conf/php5/apache2.ini /etc/php5/apache2/php.ini
 ADD ./conf/php5/cli.ini /etc/php5/cli/php.ini
 ADD ./conf/php5/apc.ini /etc/php5/conf.d/apc.ini
 
-# Drupal.
-ADD ./conf/drupal/settings.docker.php /etc/settings.docker.php
-
 # Xdebug settings.
 RUN \
   echo xdebug.remote_enable=1 >> /etc/php5/mods-available/xdebug.ini && \
