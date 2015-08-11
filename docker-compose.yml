@@ -7,7 +7,7 @@ db:
     - MYSQL_DATABASE=drupal
     - MYSQL_HOME=/etc
   volumes:
-    - .docker/etc/my.cnf:/etc/my.cnf
+    - ./.docker/etc/my.cnf:/etc/my.cnf
   hostname: dbhost
   expose:
     - "3306"

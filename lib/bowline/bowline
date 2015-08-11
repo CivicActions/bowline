@@ -92,3 +92,7 @@ enter_container () {
   echo Exit Status: $EXIT
   exit $EXIT
 }
+
+system-check () {
+  source $GIT_ROOT/lib/bowline/system-check
+}
