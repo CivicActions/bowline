@@ -110,7 +110,11 @@ fi
 echo_pass "Connected to host"
 
 echo_check "Subnetwork route"
-CHECK=$(netstat -nr|grep 172)
+if [ -n "$(command -v netstat)" ];then
+  CHECK=$(netstat -nr|grep 172)
+else
+  CHECK=$(ip route|grep 172)
+fi
 echo -e "${CHECK}"
 if [ -z "${CHECK}" ];then
   echo_fail "Subnet route not established"
