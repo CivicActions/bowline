@@ -42,6 +42,7 @@ ADD ./conf/scripts/foreground.sh /etc/apache2/foreground.sh
 # Apache.
 RUN rm -rf /var/www/*
 RUN chmod 755 /etc/apache2/foreground.sh
+RUN chmod 755 /start.sh
 
 # Apache / PHP.
 ADD ./conf/apache2/vhost.conf /etc/apache2/sites-available/default
@@ -59,5 +60,6 @@ RUN \
 
 EXPOSE 80
 
-# Start apache.
-RUN chmod 755 /start.sh
+# Set a custom entrypoint.
+COPY ./docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
