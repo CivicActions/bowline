@@ -67,3 +67,5 @@ drush si --sites-subdir=default --site-name=Bowline-Site-Install
 
 echo -e "\nDone. Getting one time login link...\n"
 drush uli
+
+echo -e "\nActivate Bowline with the following (including the .)\n. bin/activate\n"
