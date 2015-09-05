@@ -22,4 +22,6 @@ fi
 echo The apache user and group has been set to the following:
 id $USERNAME
 
+chmod ug+rwx /var/www/logs
+
 exec "$@"

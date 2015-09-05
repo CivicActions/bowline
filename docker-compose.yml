@@ -1,5 +1,5 @@
 db:
-  image: mysql:5.5
+  image: mariadb:10.0
   environment:
     - MYSQL_ROOT_PASSWORD=root
     - MYSQL_USER=dbuser
@@ -11,22 +11,26 @@ db:
   hostname: dbhost
   expose:
     - "3306"
-  dns:
-    - 8.8.8.8
-    - 8.8.4.4
-web:
-  image: davenuman/bowline-web-php:latest
-  command: /usr/sbin/apache2 -D FOREGROUND
+php:
+  image: davenuman/bowline-centos
+  command: php-fpm
   environment:
     - COMPOSER_HOME=/.composer
   expose:
-    - "80"
+    - "9000"
   volumes:
     - .:/var/www
-  entrypoint: /var/www/lib/bowline/docker-entrypoint.sh
   links:
     - db:dbhost
+  hostname: php_host
+web:
+  image: davenuman/bowline-centos
+  command: httpd -D FOREGROUND -e debug
+  expose:
+    - "80"
+  links:
+    - db:dbhost
+    - php:php_host
+  volumes_from:
+    - php
   hostname: drupal
-  dns:
-    - 8.8.8.8
-    - 8.8.4.4
