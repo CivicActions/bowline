@@ -11,10 +11,8 @@ See also the [wiki](https://github.com/davenuman/bowline/wiki) for [platform-spe
 
 Use the following command to install bowline into your new or existing Drupal project directory.
 
-Be security concious: It is best to review scripts that run from a URL before running them, [such as the one below](https://raw.githubusercontent.com/davenuman/bowline/master/lib/bowline/install.sh).
-
 ``` bash
-bash <(curl -s https://raw.githubusercontent.com/davenuman/bowline/master/lib/bowline/install.sh)
+wget 'https://raw.githubusercontent.com/davenuman/bowline/master/lib/bowline/install.sh' -O bowline-install.sh ; cat bowline-install.sh ; read -n1 -p "Run above script? (y/n)" ; if [ "$REPLY" = "y" ]; then bash bowline-install.sh; fi
 ```
 
 ## Activate
