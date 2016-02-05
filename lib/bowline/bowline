@@ -14,7 +14,7 @@ check_proxy() {
   unset PROXY_RUNNING PROXY_HOST_SET;
   if [ "$(docker ps -q -f name=proxy_)" ];then
     PROXY_RUNNING="true";
-    PROXY_HOST_SET=$(docker exec proxy_dnsmasq_1 grep "\s${BOWLINE}$" /etc/althosts|grep "$web_ip\s")
+    PROXY_HOST_SET=$(docker exec proxy_dnsmasq_1 grep "\s${SLUG}$" /etc/althosts|grep "$web_ip\s")
   fi
 }
 
@@ -23,6 +23,7 @@ bowline_init () {
   cd $(dirname $0)
   GIT_ROOT=$(git rev-parse --show-toplevel)
   BOWLINE=${GIT_ROOT##*/}
+  if [ "${COMPOSE_PROJECT_NAME}" ];then BOWLINE=${COMPOSE_PROJECT_NAME}; fi
   GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
   SLUG=${BOWLINE//-/}  # Fig/Compose doesn't allow the - char.
   SLUG=${SLUG//_/}  # Fig/Compose doesn't allow the _ char.
@@ -38,6 +39,7 @@ bowline_init () {
       exit 1
     fi
   fi
+  DCOMPOSE="$DCOMPOSE -p $SLUG"
 
   cd $GIT_ROOT
 
