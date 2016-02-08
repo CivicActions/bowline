@@ -3,6 +3,7 @@
   "description": "The Project.",
   "require": {
     "drush/drush": "6.*",
+    "wp-cli/wp-cli": "~0.18.0",
     "drupal/coder": "~8.2"
   }
 }

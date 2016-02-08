@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+assert_running
+assert_composer
+
+check_proxy
+[ "$PROXY_HOST_SET" ] && DRUSH_URI="http://${BOWLINE}.localtest.me" || DRUSH_URI="http://${web_ip}/"
+
+FLAGS="-i"
+if tty -s; then
+  FLAGS="${FLAGS} -t"
+  echo "Running 'wp $@' inside container:"
+fi
+
+docker exec $FLAGS ${web} sudo -iu www-data TERM="$TERM" /var/www/vendor/wp-cli/wp-cli/bin/wp --url="$DRUSH_URI" --path=/var/www/docroot/ "$@"
