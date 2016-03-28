@@ -42,7 +42,7 @@ drush st
 1. Replace the content of this readme.md file with appropriate description of your project.
 
 ## Updating Bowline
-The intention for typical usage of Bowling is to set up this repository as a secondary git remote. If you followed these instructions, the remote is called bowline. (You can add whatever is appropriate for your project as the origin remote.)
+The intention for typical usage of Bowline is to set up this repository as a secondary git remote. If you followed these instructions, the remote is called bowline. (You can add whatever is appropriate for your project as the origin remote.)
 
 If you would like to pull in the latest Bowline code you basically just need to update the bin and lib directories.This can be done with the following command:
 ```bash
