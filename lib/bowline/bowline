@@ -22,6 +22,7 @@ check_proxy() {
 bowline_init () {
   cd $(dirname $0)
   GIT_ROOT=$(git rev-parse --show-toplevel)
+  if [ -f "${GIT_ROOT}/.bowline/config" ]; then source "${GIT_ROOT}/.bowline/config"; fi
   BOWLINE=${GIT_ROOT##*/}
   if [ "${COMPOSE_PROJECT_NAME}" ];then BOWLINE=${COMPOSE_PROJECT_NAME}; fi
   GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
