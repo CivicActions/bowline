@@ -4,11 +4,25 @@ source $(dirname $0)/../lib/bowline/bowline
 
 if [ ! "$1" ];then
   echo "Usage: hoist [rigging]"
-  echo "Available riggings:"
+  echo -e "\nAvailable Bowline riggings:"
   ls lib/rigging
+  if [ -d "$RIGGING_PATH" ];then
+    echo -e "\nAvailable local riggings (in ${RIGGING_PATH}):"
+    ls $RIGGING_PATH;
+    echo -e "\nNote: if there are name conflicts, the local riggings will be used."
+  fi
+  echo ""
   exit
 fi
 
 echo $(date) - adding ${1}>> logs/rigging
-source lib/rigging/${1}/${1}.hoist
+if [ -f "$RIGGING_PATH/${1}/${1}.hoist" ];then
+  source "$RIGGING_PATH/${1}/${1}.hoist"
+elif [ -f "lib/riggings/${1}/${1}.hoist" ];then
+  source lib/rigging/${1}/${1}.hoist
+else
+  echo Error: Rigging not found.
+  echo $(date) - hoist ${1}: error: rigging not found.>> logs/rigging
+  exit 1
+fi
 echo $(date) - hoist ${1}: done.>> logs/rigging

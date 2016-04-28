@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#
+# This file is sourced by the bowline library.
+# Syntax: simple "KEY=VAL" pairs on separate lines
+#
+
+RIGGING_PATH="${HOME}/bowline/riggings"
+
