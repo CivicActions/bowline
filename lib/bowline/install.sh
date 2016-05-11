@@ -57,7 +57,7 @@ settings_init
 echo -e "Settings initialized\n"
 if [ -e "docroot/core/CHANGELOG.txt" ];then
   # Drupal 8 needs newer drush
-  composer global require drush/drush:dev-master
+  composer global require drush/drush:8.*
   echo -e "Drush updated for drupal 8.\n"
 fi
 
