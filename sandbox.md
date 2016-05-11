@@ -43,12 +43,12 @@ bash <(curl -s https://raw.githubusercontent.com/blinkreaction/boot2docker-vagra
 cd ~/workspace
 bash <(curl -s https://raw.githubusercontent.com/blinkreaction/boot2docker-vagrant/master/scripts/setup.sh)
 ```
-NOTE: The rest of these commands run from the `~/workspace/PROJECT` directory.
 
 ## Step 2. Clone this repo
 
 ``` bash
 git clone PROJECT_GIT_URL
+cd PROJECT
 ```
 
 ### Step 3. Place a recent, sanitized copy of the database in the base directory:
