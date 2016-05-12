@@ -14,8 +14,7 @@ if [ ! -d "${settingspath}" ];then
   version="drupal-7"
   if [ "${drupal}" = "8" ];then
     version="drupal-8"
-    # Install Drush 7
-    composer global require drush/drush:dev-master
+    composer require drush/drush:8.*
   fi
   drush dl --destination=/var/www $version
   [ -d "docroot" ] && mv -v docroot old-docroot
