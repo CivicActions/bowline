@@ -8,17 +8,7 @@ echo "Are you sure you want to stop and remove the containers for this project [
 read confirm;
 [[ $confirm == 'n' ]] && exit 1;
 
-check_proxy
-if [ "$PROXY_RUNNING" ];then
-  echo "Removing proxy containers"
-  cd lib/proxy
-  $DCOMPOSE stop
-  $DCOMPOSE rm --force -v
-  cd $GIT_ROOT
-fi
-
 $DCOMPOSE stop
 $DCOMPOSE rm --force -v
 
 exit 0;
-;;

@@ -10,14 +10,6 @@ get_container_name () { echo "${SLUG}_${1}_1"; }
 
 check_build() { unset CONTAINERS_BUILT; [ "$(docker ps -a | grep ${SLUG}_web)" ] && CONTAINERS_BUILT="true"; }
 
-check_proxy() {
-  unset PROXY_RUNNING PROXY_HOST_SET;
-  if [ "$(docker ps -q -f name=proxy_)" ];then
-    PROXY_RUNNING="true";
-    PROXY_HOST_SET=$(docker exec proxy_dnsmasq_1 grep "\s${SLUG}$" /etc/althosts|grep "$web_ip\s")
-  fi
-}
-
 # Set basic env variables.
 bowline_init () {
   cd $(dirname $0)
@@ -63,10 +55,39 @@ bowline_init () {
     fi
     export containers="${containers} ${name}"
   done
+
+  [ "$CONF_WEB_DOMAIN" ] && WEB_DOMAIN=$CONF_WEB_DOMAIN || WEB_DOMAIN="${SLUG}.localtest.me"
 }
 
 [ $context = "host" ] && bowline_init
 
+
+assert_proxy () {
+  local proxy_image=traefik
+  local proxy_domain=localtest.me
+  # Check if the proxy container is running.
+  if [ ! "$(docker ps -f name=proxy -f ancestor=$proxy_image -q)" ];then
+    # Check if the proxy container stopped.
+    if [ "$(docker ps -f name=proxy -f ancestor=$proxy_image -qa)" ];then
+      echo "Restarting proxy container"
+      docker start proxy
+    else
+      echo "Starting proxy container"
+      docker run -d --privileged \
+        -p 80:80 -p 443:443 -p 8080:8080 \
+        -v /var/run/docker.sock:/var/run/docker.sock -v /dev/null:/etc/traefik/traefik.toml \
+        --name=proxy traefik --web --docker --docker.domain=${proxy_domain} --logLevel=DEBUG
+    fi
+  fi
+
+  # Configure host for proxy.
+  local proxyconf_file=".bowline/docker-compose.proxyconf.yml"
+  echo -e "web:\n  labels:" > $proxyconf_file
+  echo -e "    - traefik.backend=${SLUG}" >> $proxyconf_file
+  echo -e "    - traefik.frontend.rule=Host:${WEB_DOMAIN}" >> $proxyconf_file
+
+  DCOMPOSE="$DCOMPOSE -f docker-compose.yml -f $proxyconf_file"
+}
 
 assert_running () {
   local cn=$(get_container_name web)
