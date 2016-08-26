@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+assert_running
+
+docker exec -it ${web} sudo -iu www-data /var/www/vendor/bin/drupal --root=/var/www/docroot $@
