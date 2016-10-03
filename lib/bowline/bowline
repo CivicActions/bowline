@@ -20,6 +20,7 @@ bowline_init () {
   GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
   SLUG=${BOWLINE//-/}  # Fig/Compose doesn't allow the - char.
   SLUG=${SLUG//_/}  # Fig/Compose doesn't allow the _ char.
+  SLUG=$(echo ${SLUG} | tr "[A-Z]" "[a-z]") # Mixed case dirs cause issue with docker image names
   DCOMPOSE="docker-compose"
   if [ ! "$(command -v docker-compose)" ];then
     if [ "$(command -v fig)" ];then
