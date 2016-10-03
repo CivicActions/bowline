@@ -1,37 +1,141 @@
 #!/usr/bin/env bash
 
+
+if [[ $# -gt 0 && ($1 == '--help' || $1 == '-h') ]]; then
+  echo -e "usage: import [OPTIONS] [database]"
+  echo -e "  [-b]\t\t\tSkip database backup"
+  echo -e "  [-d database]\t\tDatabase name, default is 'drupal'"
+  echo -e "  [-h host]\t\tDatabase host, default is 'dbhost'"
+  echo -e "  [-u user]\t\tDatabase user, default is 'dbuser'"
+  echo -e "  [-p pass]\t\tDatabase password, default is 'dbpass'"
+  echo -e "  [-t port]\t\tDatabase port, default is 3306"
+  echo -e "  [-z]\t\t\tUse uncompressed import file .snapshot.sql or .snapshot-dbname.sql"
+  echo -e "  [-i filename]\t\tOverride default sql import filename"
+  echo -e "  [--help | -h]\t\tPrint help and exit"
+  echo -e "\n  database\t\tDatabase name, default is 'drupal'. Import filename is .snapshot-dbname.sql.gz or .snapshot.sql.gz if not specified."
+  exit 1;
+fi
+
 source $(dirname $0)/../lib/bowline/bowline
 enter_container $@
 
+echo "Running import..."
+echo -e "Enter 'import --help' for usage\n"
+
+#Establish default variables
+DBNAME=drupal
+DBPORT=3306
+DBUSER=dbuser
+DBPASS=dbpass
+DBHOST=dbhost
+IMPORT_DB_FILE=""
+NO_GZIP=0
+NO_BACKUP=0
+
+while getopts ":u:p:t:h:zbi:d:" opt; do
+  case $opt in
+    d)
+      DBNAME=$OPTARG
+      ;;
+    u)
+      DBUSER=$OPTARG
+      ;;
+    p)
+      DBPASS=$OPTARG
+      ;;
+    t)
+      DBPORT=$OPTARG
+      ;;
+    h)
+      DBHOST=$OPTARG
+      ;;
+    z)
+      NO_GZIP=1
+      ;;
+    b)
+      NO_BACKUP=1
+      ;;
+    i)
+      IMPORT_DB_FILE=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1;
+      ;;
+  esac
+done
+
+#Support for legacy parameter --nobackup
+if [ "$1" == "--nobackup" ]; then
+  NO_BACKUP=1
+fi
+
+MY_ARGS="--host=$DBHOST --user=$DBUSER --password=$DBPASS $DBNAME"
+MYSQL="mysql $MY_ARGS"
+
 # Wait for mysql connection.
-echo "NOTE: Please ignore any warnings about 'Connection refused' while waiting for the db service to start"
+echo "# Connecting to database..."
+echo -e "  NOTE: Please ignore any warnings about 'Connection refused' while waiting for the db service to start\n"
+
 i=0
-while ! bash -c "cat < /dev/null > /dev/tcp/dbhost/3306"; do
+while ! bash -c "cat < /dev/null > /dev/tcp/dbhost/$DBPORT"; do
   i=$(($i+1))
   if [ "$i" -gt 7 ]; then
-    echo "Cannot connect to database. Make sure it is running and the web container is linked to it."
+    echo "  Cannot connect to database. Make sure it is running and the web container is linked to it."
     exit 1;
   fi
   sleep 2;
+  echo "  ...Retrying db connection"
 done
 
-MY_ARGS="--host=dbhost --user=dbuser --password=dbpass drupal"
-MYSQL="mysql $MY_ARGS"
+if [ -z "$IMPORT_DB_FILE" ]; then
+  if [[ "$NO_GZIP" == 1 ]]; then
+    IMPORT_DB_FILE_SUFFIX='.sql'
+  else
+    IMPORT_DB_FILE_SUFFIX='.sql.gz'
+  fi
+
+  if [ "$DBNAME" != "drupal" ]; then
+    IMPORT_DB_FILE_PREFIX=".snapshot-$DBNAME"
+  else
+    IMPORT_DB_FILE_PREFIX=".snapshot"
+  fi
+
+  IMPORT_DB_FILE=$IMPORT_DB_FILE_PREFIX$IMPORT_DB_FILE_SUFFIX
+fi
+
+# Check import file exists
+if [ ! -f $IMPORT_DB_FILE ]; then
+  echo "Source file $IMPORT_DB_FILE does not exist"
+  exit 1;
+fi
+
 
 # Backup first.
-if [ "$1" == "--nobackup" ]; then
+if [ "$NO_BACKUP" == "1" ]; then
   echo "# Not making a backup!"
 else
   echo "# Backing up current database before importing."
-  FILENAME=.pre-import.sql.gz
-  mysqldump $MY_ARGS | gzip -c > $FILENAME
-  echo "Database snapshot saved as ${FILENAME} before running import."
+  BACKUP_FILE=".backup$IMPORT_DB_FILE"
+
+  if [[ "$NO_GZIP" == 1 ]]; then
+    mysqldump $MY_ARGS > $BACKUP_FILE
+  else
+    mysqldump $MY_ARGS | gzip -c > $BACKUP_FILE
+  fi
+  echo "# Database snapshot saved as $BACKUP_FILE before running import."
 fi
 
 # Drop all tables.
-$MYSQL -ss -e 'SELECT concat("DROP TABLE `", TABLE_NAME, "`;") FROM information_schema.tables WHERE table_schema="drupal"'|$MYSQL
+echo "# Dropping tables from $DBNAME..."
+$MYSQL -ss -e 'SELECT concat("DROP TABLE `", TABLE_NAME, "`;") FROM information_schema.tables WHERE table_schema="$DBNAME"'|$MYSQL
 
 # Import.
-# @TODO: check for the file first.
-pv .snapshot.sql.gz | gunzip | $MYSQL
+echo "# Importing database..."
+if [[ "$NO_GZIP" == 1 ]]; then
+  pv $IMPORT_DB_FILE | $MYSQL
+else
+  pv $IMPORT_DB_FILE | gunzip | $MYSQL
+fi
 
+echo "# Import Complete!"
