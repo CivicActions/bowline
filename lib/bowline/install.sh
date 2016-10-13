@@ -32,7 +32,7 @@ if [ ! -e "lib/bowline" ]; then
   git checkout bowline/master .
   git add . && git status
   git rm --cached readme.md bowline-install.sh
-  git commit -m 'Adding bowline code'
+  git commit -m 'Adding bowline code' -n
 fi
 
 if [ ! -e "docroot" ] && [ -e "html" ]; then
