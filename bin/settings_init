@@ -21,20 +21,16 @@ if [ ! -d "${settingspath}" ];then
   mv -v drupal-* docroot
 fi
 
-if [ ! -f "${settingspath}/settings.php" ];then
-  cp -v ${settingspath}/default.settings.php ${settingspath}/settings.php
-fi
 
-if [ ! "$(grep settings.docker.php ${settingspath}/settings.php)" ]; then
-  chmod +w ${settingspath}/settings.php
-  echo "" >> ${settingspath}/settings.php
-  echo "// Include file for docker database connection." >> ${settingspath}/settings.php
-  echo "if (file_exists('/var/www/.docker/etc/settings.docker.php')) {" >> ${settingspath}/settings.php
-  echo "  require '/var/www/.docker/etc/settings.docker.php';" >> ${settingspath}/settings.php
-  echo "}" >> ${settingspath}/settings.php
-  echo "Added require to settings.php"
+if [ ! -f "${settingspath}/local.settings.php" ];then
+  cp -v ${settingspath}/sample_bowline.local.settings.php ${settingspath}/local.settings.php
+  echo "Docker created ${settingspath}/local.settings.php for sandbox."
+  echo "Edit the file if it is not for a sandbox."
+elif [ ! "$(grep settings.docker.php ${settingspath}/local.settings.php)" ]; then
+  echo "Docker based local.settings.php file already exists. Initialization skipped."
 else
-  echo "Docker settings file already initialized."
+  echo "A local.settings.php file already exists, but is not Docker based."
+  echo "If you would like to convert to Docker, remove ${settingspath}/local.settings.php and re-run this command."
 fi
 
 echo -ne "Hint: If you would like to perform a fresh site install, run this:\n\tdrush si --sites-subdir=default\n\n"
