@@ -4,6 +4,8 @@ source $(dirname $0)/../lib/bowline/bowline
 assert_proxy
 
 echo "# STARTING CONTAINERS"
+$DCOMPOSE stop web php
+$DCOMPOSE rm web php
 $DCOMPOSE up -d --no-recreate
 
 EXIT=$?
