@@ -5,7 +5,7 @@ assert_proxy
 
 echo "# STARTING CONTAINERS"
 $DCOMPOSE stop web php
-$DCOMPOSE rm web php
+$DCOMPOSE rm --force web php
 $DCOMPOSE up -d --no-recreate
 
 EXIT=$?
