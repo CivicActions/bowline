@@ -7,8 +7,8 @@
    **OSX users:** You may need to start your Docker daemon with the command: 
 
   ```bash 
-  eval $(docker-machine env default)
   docker-machine start default 
+  eval $(docker-machine env default)
   ```
 
    before proceeding.
