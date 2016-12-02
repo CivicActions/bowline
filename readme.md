@@ -3,6 +3,16 @@
 ## Requirements
 1. [Docker](https://www.docker.com/)
   - Make sure you can successfully run docker commands without sudo. See [Ubuntu example](https://docs.docker.com/installation/ubuntulinux/#giving-non-root-access).
+  
+   **OSX users:** You may need to start your Docker daemon with the command: 
+
+  ```bash 
+  eval $(docker-machine env default)
+  docker-machine start default 
+  ```
+
+   before proceeding.
+   
 1. [Docker Compose](http://docs.docker.com/compose/)
 
 See also the [wiki](https://github.com/davenuman/bowline/wiki) for [platform-specific instructions](https://github.com/davenuman/bowline/wiki/Platform-specific-instructions).
