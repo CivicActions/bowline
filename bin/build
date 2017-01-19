@@ -3,6 +3,12 @@
 source $(dirname $0)/../lib/bowline/bowline
 assert_proxy
 
+if [ "$($DCOMPOSE ps | grep -c filestore)" -eq "0" ];then
+  echo "# Initial copy to container volume. This can take a long time, especially on non-linux systems."
+  $DCOMPOSE up -d --no-recreate filestore
+  file-copy .
+fi
+
 echo "# STARTING CONTAINERS"
 $DCOMPOSE stop web php
 $DCOMPOSE rm --force web php

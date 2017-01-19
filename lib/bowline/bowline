@@ -18,6 +18,8 @@ bowline_init () {
   BOWLINE=${GIT_ROOT##*/}
   if [ "${COMPOSE_PROJECT_NAME}" ];then BOWLINE=${COMPOSE_PROJECT_NAME}; fi
   GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  export HOST_UID=$(id -u)
+  export HOST_GID=$(id -g)
   SLUG=${BOWLINE//-/}  # Fig/Compose doesn't allow the - char.
   SLUG=${SLUG//_/}  # Fig/Compose doesn't allow the _ char.
   SLUG=$(echo ${SLUG} | tr "[A-Z]" "[a-z]") # Mixed case dirs cause issue with docker image names
@@ -99,10 +101,10 @@ assert_running () {
 assert_composer () {
   if [ ! -d "vendor" ];then
     echo "Setting up Composer...."
-    docker exec -it ${web} chown -R www-data:www-data /var/www
-    docker exec -it ${web} chown www-data:www-data /usr/local/bin/composer.phar
-    docker exec -it ${web} sudo -iu www-data composer --working-dir=/var/www self-update
-    docker exec -it ${web} sudo -iu www-data composer --working-dir=/var/www install
+    docker exec ${web} chown -R www-data:www-data /var/www
+    docker exec ${web} chown www-data:www-data /usr/local/bin/composer.phar
+    docker exec --user www-data ${web} composer --working-dir=/var/www self-update
+    docker exec --user www-data ${web} composer --working-dir=/var/www install
   fi
 }
 

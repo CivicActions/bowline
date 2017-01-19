@@ -1,5 +1,12 @@
+# Storage
+filestore:
+  image: civicactions/sshd
+  environment:
+    - HOST_USER=${HOST_UID}:${HOST_GID}
+  volumes:
+    - /var/www
 db:
-  image: mariadb:10.0
+  image: mariadb:10.1
   environment:
     - MYSQL_ROOT_PASSWORD=root
     - MYSQL_USER=dbuser
@@ -11,26 +18,43 @@ db:
   hostname: dbhost
   expose:
     - "3306"
+
+# Services
 php:
   image: davenuman/bowline-centos
   command: php-fpm
   environment:
     - COMPOSER_HOME=/.composer
+    - HOST_USER=${HOST_UID}:${HOST_GID}
   expose:
     - "9000"
-  volumes:
-    - .:/var/www
+  volumes_from:
+    - filestore
   links:
     - db:dbhost
   hostname: php_host
 web:
   image: davenuman/bowline-centos
   command: httpd -D FOREGROUND -e debug
+  environment:
+    - HOST_USER=${HOST_UID}:${HOST_GID}
   expose:
     - "80"
   links:
     - db:dbhost
     - php:php_host
   volumes_from:
-    - php
+    - filestore
   hostname: drupal
+
+# File synchronizing
+sync:
+  image: civicactions/bg-sync
+  volumes:
+    - .:/source
+  volumes_from:
+    - filestore
+  environment:
+    - SYNC_DESTINATION=/var/www
+    - SYNC_WAIT=20
+    - SYNC_VERBOSE=1
