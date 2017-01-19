@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
 source $(dirname $0)/../lib/bowline/bowline
+enter_container
 
-settingspath=$GIT_ROOT/docroot/sites/default
+settingspath=/var/www/docroot/sites/default
+cd /var/www
+fix-perms
 
 if [ ! -d "${settingspath}" ];then
   echo "Looks like Drupal isn't installed. Would you like to install it? [Y,n,7,8]"
@@ -16,7 +19,7 @@ if [ ! -d "${settingspath}" ];then
     version="drupal-8"
     composer require drush/drush:8.*
   fi
-  drush dl --destination=/var/www $version
+  /var/www/vendor/bin/drush dl --destination=/var/www $version
   [ -d "docroot" ] && mv -v docroot old-docroot
   mv -v drupal-* docroot
 fi
@@ -39,4 +42,3 @@ fi
 
 echo -ne "Hint: If you would like to perform a fresh site install, run this:\n\tdrush si --sites-subdir=default\n\n"
 
-exit 0
