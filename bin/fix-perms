@@ -13,5 +13,7 @@ docker exec ${sync} \
 
 echo "Setting file ownership on web container to $HOST_UID:$HOST_GID"
 docker exec ${web} \
-  find /var/www -not -user $HOST_UID -or -not -group $HOST_GID -exec chown $VERBOSE $HOST_UID:$HOST_GID "{}" \;
+  find /var/www -not -user $HOST_UID -exec chown $VERBOSE $HOST_UID:$HOST_GID "{}" \;
+docker exec ${web} \
+  find /var/www -not -group $HOST_GID -exec chown $VERBOSE $HOST_UID:$HOST_GID "{}" \;
 

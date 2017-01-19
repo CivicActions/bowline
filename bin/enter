@@ -3,17 +3,20 @@
 source $(dirname $0)/../lib/bowline/bowline
 assert_running
 
+EXEC_OPTS=''
+
 if [[ "$1" = "sudo" ]]; then
   shift;
   cmd='bash'
   [[ "$@" ]] && cmd=$@
+  [ "${cmd}" == "bash" ] && EXEC_OPTS='-ti'
   echo "Running '${cmd}' as root inside container"
-  docker exec -it ${web} ${cmd}
+  docker exec $EXEC_OPTS ${web} ${cmd}
   exit
 fi
 
 cmd='bash'
 [[ "$@" ]] && cmd=$@
+[ "${cmd}" == "bash" ] && EXEC_OPTS='-ti'
 
-echo "Running '${cmd}' inside container"
-docker exec -it ${web} sudo -iu www-data ${cmd}
+docker exec --user www-data $EXEC_OPTS ${web} ${cmd}
