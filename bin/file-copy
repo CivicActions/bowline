@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+source $(dirname $0)/../lib/bowline/bowline
+
+if [ ! "$1" ];then
+  echo "usage: file-copy path/to/file [path2,..]"
+  exit 1
+fi
+
+for mod in "$@"; do
+  docker exec ${filestore} mkdir -p /var/www/$(dirname ${mod})
+  docker cp ${mod} ${filestore}:/var/www/$(dirname ${mod})/.
+  docker exec ${filestore} chown -Rc $HOST_UID:$HOST_GID /var/www/${mod}
+done

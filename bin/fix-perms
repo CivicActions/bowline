@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
 source $(dirname $0)/../lib/bowline/bowline
-enter_container
 
-chown -R -c www-data:www-data /var/www
+VERBOSE=''
+if [ "$1" == "-v" ];then VERBOSE='-c'; fi
 
-echo "File permissions set to www-data:"
-id www-data
-exit 0
+echo "Setting file ownership on sync container to $HOST_UID:$HOST_GID"
+docker exec ${sync} \
+  find /source -not -user $HOST_UID -exec chown $VERBOSE $HOST_UID:$HOST_GID "{}" \;
+docker exec ${sync} \
+  find /source -not -group $HOST_GID -exec chown $VERBOSE $HOST_UID:$HOST_GID "{}" \;
+
+echo "Setting file ownership on web container to $HOST_UID:$HOST_GID"
+docker exec ${web} \
+  find /var/www -not -user $HOST_UID -or -not -group $HOST_GID -exec chown $VERBOSE $HOST_UID:$HOST_GID "{}" \;
+
