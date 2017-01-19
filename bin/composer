@@ -3,4 +3,4 @@
 source $(dirname $0)/../lib/bowline/bowline
 assert_running
 
-docker exec -it ${web} sudo -iu www-data composer --working-dir=/var/www $@
+docker exec --user www-data ${web} composer --working-dir=/var/www $@
