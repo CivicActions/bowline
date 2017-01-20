@@ -7,8 +7,12 @@ if [ ! "$1" ];then
   exit 1
 fi
 
+docker pause ${sync}
+
 for mod in "$@"; do
   docker exec ${filestore} mkdir -p /var/www/$(dirname ${mod})
   docker cp ${mod} ${filestore}:/var/www/$(dirname ${mod})/.
   docker exec ${filestore} chown -Rc $HOST_UID:$HOST_GID /var/www/${mod}
 done
+
+docker unpause ${sync}
