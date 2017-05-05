@@ -1,7 +1,47 @@
 #!/usr/bin/env bash
 
 source $(dirname $0)/../lib/bowline/bowline
-enter_container $@
+
+
+# Process the arguments.
+DBFILE=$1
+# Look for --nobackup option.
+if [ "$1" == "--nobackup" ]; then
+  BACKUP='false'
+  # Clear out argument 1.
+  DBFILE=''
+elif [[ "$2" == "--nobackup" ]]; then
+  BACKUP='false'
+else
+  BACKUP='true'
+fi
+
+# Read the parameter for the import argument.
+
+# Make the snapshot from docker pull the default.
+if [ "$DBFILE" == "" ]; then
+  DBFILE=.snapshot.sql.gz
+
+# Check for generic specification of the git branch.
+elif [[ "$DBFILE" == "branch" ]]; then
+  DBFILE=.${GIT_BRANCH}.sql.gz
+fi
+
+
+enter_container ${DBFILE} ${BACKUP}
+# enter oddly reprocesses the variables, so reassign by arguments.
+DBFILE=$1
+BACKUP=$2
+
+# Check for file existence.
+if [ -f $DBFILE ]; then
+   DATE=$(date -r $DBFILE);
+   echo "File ${DBFILE} exists. Proceeding with import from ${DATE}";
+else
+   echo "File '${DBFILE}' does not exist.  Suggest running 'pull' or provide the file.";
+   exit 1;
+fi
+
 
 # Wait for mysql connection.
 echo "NOTE: Please ignore any warnings about 'Connection refused' while waiting for the db service to start"
@@ -19,7 +59,7 @@ MY_ARGS="--host=dbhost --user=dbuser --password=dbpass drupal"
 MYSQL="mysql $MY_ARGS"
 
 # Backup first.
-if [ "$1" == "--nobackup" ]; then
+if [ "$BACKUP" == "false" ]; then
   echo "# Not making a backup!"
 else
   echo "# Backing up current database before importing."
@@ -30,8 +70,9 @@ fi
 
 # Drop all tables.
 $MYSQL -ss -e 'SELECT concat("DROP TABLE `", TABLE_NAME, "`;") FROM information_schema.tables WHERE table_schema="drupal"'|$MYSQL
+echo "Tables dropped.  Beginning import."
 
 # Import.
-# @TODO: check for the file first.
-pv .snapshot.sql.gz | gunzip | $MYSQL
+pv $DBFILE | gunzip | $MYSQL
 
+echo "# DB import complete, recommend running 'drush updb'."
