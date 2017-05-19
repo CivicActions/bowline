@@ -2,5 +2,5 @@
 # Rebuilds the patches applied to the repo. Won't build core.
 LOCAL_ROOT=$(git rev-parse --show-toplevel)
 cd $LOCAL_ROOT/docroot/sites/all
-drush make /var/www/docroot/patches.make -y --no-core --no-gitinfofile --contrib-destination=./docroot/sites/all --concurrency=8
+drush make /var/www/docroot/patches.make -y --no-core --no-gitinfofile --contrib-destination=./docroot/sites/all --concurrency=8 --no-cache
 cd $LOCAL_ROOT/
