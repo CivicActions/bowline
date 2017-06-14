@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Usage: set a script shabang to '/usr/bin/env bowline-shell'
+# See example-script for a simple example.
+
+cmd="$(cat $1|grep -v ^\#)"
+
+source $(dirname $0)/../lib/bowline/bowline
+docker exec --user www-data ${web} bash -c "$cmd"
