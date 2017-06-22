@@ -16,11 +16,11 @@ if [ ! -d "${settingspath}" ];then
   version="drupal-7"
   if [ "${drupal}" = "8" ];then
     version="drupal-8"
-    composer require drush/drush:8.*
   fi
+  composer require drush/drush:8.*
   /var/www/vendor/bin/drush dl --destination=/var/www $version
   [ -d "docroot" ] && mv -v docroot old-docroot
-  mv -v drupal-* docroot
+  mv -v drupal-${drupal}* docroot
 fi
 
 if [ ! -f "${settingspath}/settings.php" ];then
