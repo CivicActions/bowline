@@ -9,5 +9,11 @@ $DCOMPOSE up -d web
 EXIT=$?
 echo -e "\033[m Exit Status: $EXIT"
 
+# Connect network manually if not connected
+if [ ! "$(docker inspect proxy | grep ${BOWLINE}_default)" ];then
+  echo "Connecting network ${BOWLINE}_default to proxy..."
+  docker network connect ${BOWLINE}_default proxy
+fi
+
 bowline
 exit $EXIT

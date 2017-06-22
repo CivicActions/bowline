@@ -4,4 +4,4 @@ source $(dirname $0)/../lib/bowline/bowline
 assert_running
 assert_composer
 
-docker exec -it ${web} sudo -iu www-data /var/www/vendor/bin/codecept "$@"
+docker exec --user www-data -it ${web} /var/www/vendor/bin/codecept "$@"

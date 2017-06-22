@@ -5,4 +5,4 @@ assert_running
 assert_composer
 
 echo "Running 'behat $@' inside container"
-docker exec -it ${web} sudo -iu www-data ./vendor/bin/behat -c tests/behat/local.yml "$@"
+docker exec --user www-data -it ${web} ./vendor/bin/behat -c tests/behat/local.yml "$@"

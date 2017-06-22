@@ -61,6 +61,8 @@ if [ -e "docroot/core/CHANGELOG.txt" ];then
   echo -e "Drush updated for drupal 8.\n"
 fi
 
+fix-perms
+
 echo "If you are importing an existing database, save the database export file as .snapshot.sql.gz in this project root directory, then run the 'import' command. If not, you can continue with installing Drupal."
 read_continue "Would you like to perform a fresh Drupal site install? [Y/n]"
 drush si --sites-subdir=default --site-name=Bowline-Site-Install

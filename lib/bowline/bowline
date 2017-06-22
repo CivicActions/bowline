@@ -8,6 +8,48 @@ fi
 
 get_container_name () { echo "${SLUG}_${1}_1"; }
 
+# Parses YML file and outputs key=value for each depth.
+# Usage: $(parse_yml filename prefix_to_add_to_key)
+#
+# Output will have for example:
+#  PREFIX_firstdepthvar1=value
+#  PREFIX_firstdepthvar2__seconddepthvar2=value
+#  PREFIX_firstdepthvar3__seconddepthvar3__thirddepthvar3=value
+parse_yml () {
+  local prefix=$2
+  local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
+  sed -ne "s|^\($s\):|\1|" \
+      -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
+      -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+   awk -F$fs '{
+      indent = length($1)/2;
+      vname[indent] = $2;
+      for (i in vname) {if (i > indent) {delete vname[i]}}
+      if (length($3) > 0) {
+         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("__")}
+         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
+      }
+   }'
+}
+
+# Parses docker-compose.yml and outputs the container names.
+list_containers () {
+  yml_output="$(parse_yml docker-compose.yml DOCKER_COMPOSE_YML_)"
+  eval $yml_output
+  IFS=$'\n' read -rd '' -a yml_output_vars <<<"$yml_output"
+  for i in "${yml_output_vars[@]}"
+  do
+    key=${i%%=*}
+    if [ "$DOCKER_COMPOSE_YML_version" == "2" ]; then
+      if [[ $key =~ ^DOCKER_COMPOSE_YML_services__(.*)__image ]]; then
+        echo ${BASH_REMATCH[1]}
+      fi
+    else
+      echo $key
+    fi
+  done
+}
+
 check_build() { unset CONTAINERS_BUILT; [ "$(docker ps -a | grep ${SLUG}_web)" ] && CONTAINERS_BUILT="true"; }
 
 # Set basic env variables.
@@ -42,16 +84,14 @@ bowline_init () {
   ### @@ Note, everytime the ip changes the following should run
   # Add some useful container env
   check_build
-  list_containers=$(grep '^\S*:' docker-compose.yml)
   unset containers
-  for c in $list_containers; do
-    name="${c%:}"
+  for name in $(list_containers); do
     container_name="$(get_container_name ${name})"
     # Set variables such as $web and $db from the docker-compose.yml.
     export "${name}=${container_name}"
     # Set IP addresses if they are available.
     if [ "$CONTAINERS_BUILT" ];then
-      local ip="$(docker inspect --format='{{.NetworkSettings.IPAddress}}' ${container_name})"
+      local ip="$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ${container_name})"
       [ "$ip" ] && export "${name}_ip"=$ip || export "${name}_ip"="not running"
     else
       export "${name}_ip"="not built"
@@ -85,9 +125,11 @@ assert_proxy () {
 
   # Configure host for proxy.
   local proxyconf_file=".bowline/docker-compose.proxyconf.yml"
-  echo -e "web:\n  labels:" > $proxyconf_file
-  echo -e "    - traefik.backend=${SLUG}" >> $proxyconf_file
-  echo -e "    - traefik.frontend.rule=Host:${WEB_DOMAIN}" >> $proxyconf_file
+  echo -e "version: \"2\"" > $proxyconf_file
+  echo -e "services:" >> $proxyconf_file
+  echo -e "  web:\n    labels:" >> $proxyconf_file
+  echo -e "      - traefik.backend=${SLUG}" >> $proxyconf_file
+  echo -e "      - traefik.frontend.rule=Host:${WEB_DOMAIN}" >> $proxyconf_file
 
   DCOMPOSE="$DCOMPOSE -f docker-compose.yml -f $proxyconf_file"
 }
@@ -114,7 +156,7 @@ enter_container () {
     return
   fi
   assert_running
-  docker exec -it $(get_container_name web) /var/www/bin/$(basename $0) $@
+  docker exec -it --user www-data $(get_container_name web) /var/www/bin/$(basename $0) $@
   EXIT=$?
   echo Exit Status: $EXIT
   exit $EXIT
