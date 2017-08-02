@@ -62,6 +62,7 @@ bowline_init () {
   GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
   export HOST_UID=$(id -u)
   export HOST_GID=$(id -g)
+  export HOST_OS=$(uname)
   SLUG=${BOWLINE//-/}  # Fig/Compose doesn't allow the - char.
   SLUG=${SLUG//_/}  # Fig/Compose doesn't allow the _ char.
   SLUG=$(echo ${SLUG} | tr "[A-Z]" "[a-z]") # Mixed case dirs cause issue with docker image names
