@@ -28,6 +28,7 @@ services:
     environment:
       - COMPOSER_HOME=/.composer
       - HOST_USER=${HOST_UID}:${HOST_GID}
+      - HOST_OS=${HOST_OS}
     expose:
       - "9000"
     volumes_from:
