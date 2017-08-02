@@ -73,6 +73,8 @@ $MYSQL -ss -e 'SELECT concat("DROP TABLE `", TABLE_NAME, "`;") FROM information_
 echo "Tables dropped.  Beginning import."
 
 # Import.
+$MYSQL -e "SET autocommit=0;"
 pv $DBFILE | gunzip | $MYSQL
+$MYSQL -e "COMMIT; SET autocommit=1;"
 
 echo "# DB import complete, recommend running 'drush updb'."
