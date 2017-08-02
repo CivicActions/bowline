@@ -41,6 +41,7 @@ services:
     command: httpd -D FOREGROUND -e debug
     environment:
       - HOST_USER=${HOST_UID}:${HOST_GID}
+      - HOST_OS=${HOST_OS}
     expose:
       - "80"
     links:
