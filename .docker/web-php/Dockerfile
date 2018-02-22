@@ -3,7 +3,7 @@
 # - also includes Apache, Composer, Drupal configuration
 #
 
-FROM debian:wheezy
+FROM debian:jessie
 MAINTAINER David Numan <david.numan@civicactions.com>
 
 ENV DEBIAN_FRONTEND noninteractive
