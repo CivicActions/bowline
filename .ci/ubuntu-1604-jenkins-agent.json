@@ -1,0 +1,30 @@
+{
+  "_comment": "This is an Ubuntu 16.04 LTS image with the built in (i.e. old) Docker and latest stable Docker Compose",
+  "variables": {
+    "project_id": "{{env `PROJECT`}}"
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "ubuntu-1604-lts",
+      "source_image_project_id": "ubuntu-os-cloud",
+      "zone": "us-central1-a",
+      "disk_size": "10",
+      "image_name": "ubuntu-1604-jenkins-agent-{{timestamp}}",
+      "image_family": "jenkins-agent",
+      "ssh_username": "ubuntu"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": ["sudo apt-get update",
+                 "sudo apt-get install -y default-jdk docker.io",
+                 "COMPOSE_VERSION=`git ls-remote https://github.com/docker/compose | grep refs/tags | grep -oP '[0-9]+\\.[0-9][0-9]+\\.[0-9]+$' | tail -n 1`",
+                 "sudo sh -c \"curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose\"",
+                 "sudo chmod +x /usr/local/bin/docker-compose",
+                 "sudo sh -c \"curl -L https://raw.githubusercontent.com/docker/compose/${COMPOSE_VERSION}/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose\""]
+    }
+  ]
+}
