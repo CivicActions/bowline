@@ -1,5 +1,0 @@
-#!/usr/bin/env bowline-shell
-
-cd $HOME
-pwd
-id

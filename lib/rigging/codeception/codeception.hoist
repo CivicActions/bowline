@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-assert_composer
-composer require "codeception/codeception:*"
-
-echo "# Installing codeception script"
-cp -av lib/rigging/codeception/bin/* bin
-
