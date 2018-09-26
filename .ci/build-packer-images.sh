@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 export PROJECT=$(gcloud info --format='value(config.project)')
 if [ -z "$PROJECT" ]; then
@@ -16,4 +16,4 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-packer build *.json
+packer build jenkins-agent.json

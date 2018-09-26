@@ -1,0 +1,95 @@
+{
+  "variables": {
+    "project_id": "{{env `PROJECT`}}"
+  },
+  "builders": [
+    {
+      "name": "ubuntu-1604",
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "ubuntu-1604-lts",
+      "source_image_project_id": "ubuntu-os-cloud",
+      "zone": "us-central1-a",
+      "disk_size": "10",
+      "image_name": "ubuntu-1604-jenkins-agent-{{timestamp}}",
+      "image_description": "Ubuntu 16.04 LTS image with the built in (i.e. old) Docker and all stable Docker Compose",
+      "image_family": "jenkins-agent",
+      "ssh_username": "ubuntu"
+    },
+    {
+      "name": "ubuntu-1804",
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "ubuntu-1804-lts",
+      "source_image_project_id": "ubuntu-os-cloud",
+      "zone": "us-central1-a",
+      "disk_size": "10",
+      "image_name": "ubuntu-1804-jenkins-agent-{{timestamp}}",
+      "image_description": "Ubuntu 18.04 LTS image with the built in (i.e. old) Docker and all stable Docker Compose",
+      "image_family": "jenkins-agent",
+      "ssh_username": "ubuntu"
+    },
+    {
+      "name": "ubuntu-1604-latest-docker",
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "ubuntu-1604-lts",
+      "source_image_project_id": "ubuntu-os-cloud",
+      "zone": "us-central1-a",
+      "disk_size": "10",
+      "image_name": "ubuntu-1604-latest-docker-jenkins-agent-{{timestamp}}",
+      "image_description": "Ubuntu 16.04 LTS image with upgraded docker.com edge Docker and all stable Docker Compose",
+      "image_family": "jenkins-agent",
+      "ssh_username": "ubuntu"
+    },
+    {
+      "name": "ubuntu-1804-latest-docker",
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "ubuntu-1804-lts",
+      "source_image_project_id": "ubuntu-os-cloud",
+      "zone": "us-central1-a",
+      "disk_size": "10",
+      "image_name": "ubuntu-1804-latest-docker-jenkins-agent-{{timestamp}}",
+      "image_description": "Ubuntu 18.04 LTS image with upgraded docker.com edge Docker and all stable Docker Compose",
+      "image_family": "jenkins-agent",
+      "ssh_username": "ubuntu"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get update",
+        "sudo apt-get install -y default-jdk docker.io",
+        "sudo adduser --disabled-password --gecos '' jenkins",
+        "sudo usermod -aG docker jenkins"
+      ],
+      "only": [
+        "ubuntu-1604",
+        "ubuntu-1804"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get update",
+        "sudo apt-get install -y default-jdk",
+        "curl -fsSL https://get.docker.com -o get-docker.sh",
+        "sudo sh get-docker.sh",
+        "sudo adduser --disabled-password --gecos '' jenkins",
+        "sudo usermod -aG docker jenkins"
+      ],
+      "only": [
+        "ubuntu-1604-latest-docker",
+        "ubuntu-1804-latest-docker"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "./scripts/install-docker-compose.sh"
+      ]
+    }
+  ]
+}
