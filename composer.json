@@ -1,9 +1,0 @@
-{
-  "name": "group/project",
-  "description": "The Project.",
-  "require": {
-    "drush/drush": "8.*",
-    "drupal/coder": "~8.2",
-    "drupal/console": "@stable"
-  }
-}
