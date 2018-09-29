@@ -87,6 +87,18 @@ pipeline {
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
+                stage('Test on OS X 10') {
+                    agent { 
+                        label 'osx-10-docker'
+                    }
+                    steps {
+                        checkout scm
+                        sh 'ls -la'
+                        sh 'docker-compose version'
+                        sh 'docker info'
+                        sh 'docker run hello-world'
+                    }
+                }
             }
         }
     }
