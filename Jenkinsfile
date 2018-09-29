@@ -75,6 +75,18 @@ pipeline {
                         sh 'docker run hello-world'
                     }
                 }
+                stage('Test on OS X 10') {
+                    agent { 
+                        label 'osx-10-docker'
+                    }
+                    steps {
+                        checkout scm
+                        sh 'ls -la'
+                        sh 'docker-compose version'
+                        sh 'docker info'
+                        sh 'docker run hello-world'
+                    }
+                }
             }
         }
     }
