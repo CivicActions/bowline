@@ -70,6 +70,7 @@ pipeline {
                         sh 'docker info'
                         sh 'docker run hello-world'
                         sh 'docker build -t civicactions/bowline .'
+                        sh 'ls && source activate && env'
                         sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
@@ -79,11 +80,12 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
+                        sh 'ls -la && env'
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
                         sh 'docker build -t civicactions/bowline .'
+                        sh '. ./activate'
                         sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
