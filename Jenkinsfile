@@ -13,6 +13,8 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on Ubuntu 18.04') {
@@ -25,6 +27,8 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on Ubuntu 16.04 with latest Docker') {
@@ -37,6 +41,8 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on Ubuntu 18.04 with latest Docker') {
@@ -49,6 +55,8 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on CentOS 7') {
@@ -61,6 +69,8 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on CentOS 7 with latest Docker') {
@@ -73,6 +83,8 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
             }
