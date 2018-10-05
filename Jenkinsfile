@@ -4,7 +4,7 @@ pipeline {
         stage('Run Linux tests') {
             parallel {
                 stage('Test on Ubuntu 16.04') {
-                    agent { 
+                    agent {
                         label 'ubuntu-1604'
                     }
                     steps {
@@ -16,7 +16,7 @@ pipeline {
                     }
                 }
                 stage('Test on Ubuntu 18.04') {
-                    agent { 
+                    agent {
                         label 'ubuntu-1804'
                     }
                     steps {
@@ -28,7 +28,7 @@ pipeline {
                     }
                 }
                 stage('Test on Ubuntu 16.04 with latest Docker') {
-                    agent { 
+                    agent {
                         label 'ubuntu-1604-latest-docker'
                     }
                     steps {
@@ -40,7 +40,7 @@ pipeline {
                     }
                 }
                 stage('Test on Ubuntu 18.04 with latest Docker') {
-                    agent { 
+                    agent {
                         label 'ubuntu-1804-latest-docker'
                     }
                     steps {
@@ -52,7 +52,7 @@ pipeline {
                     }
                 }
                 stage('Test on CentOS 7') {
-                    agent { 
+                    agent {
                         label 'centos-7'
                     }
                     steps {
@@ -64,7 +64,7 @@ pipeline {
                     }
                 }
                 stage('Test on CentOS 7 with latest Docker') {
-                    agent { 
+                    agent {
                         label 'centos-7-latest-docker'
                     }
                     steps {
