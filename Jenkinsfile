@@ -4,7 +4,7 @@ pipeline {
         stage('Run Linux tests') {
             parallel {
                 stage('Test on Ubuntu 16.04') {
-                    agent { 
+                    agent {
                         label 'ubuntu-1604'
                     }
                     steps {
@@ -13,10 +13,12 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on Ubuntu 18.04') {
-                    agent { 
+                    agent {
                         label 'ubuntu-1804'
                     }
                     steps {
@@ -25,10 +27,12 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on Ubuntu 16.04 with latest Docker') {
-                    agent { 
+                    agent {
                         label 'ubuntu-1604-latest-docker'
                     }
                     steps {
@@ -37,10 +41,12 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on Ubuntu 18.04 with latest Docker') {
-                    agent { 
+                    agent {
                         label 'ubuntu-1804-latest-docker'
                     }
                     steps {
@@ -49,10 +55,12 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on CentOS 7') {
-                    agent { 
+                    agent {
                         label 'centos-7'
                     }
                     steps {
@@ -61,18 +69,24 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh 'ls && source activate && env'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on CentOS 7 with latest Docker') {
-                    agent { 
+                    agent {
                         label 'centos-7-latest-docker'
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
+                        sh 'ls -la && env'
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                        sh 'docker build -t civicactions/bowline .'
+                        sh '. ./activate'
+                        sh '. activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
             }
