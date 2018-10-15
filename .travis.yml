@@ -9,9 +9,6 @@ language: shell
 services:
   - docker
 
-before_install:
-- pip install docker-compose
-
 script:
 - docker-compose.exe version
 - docker-compose version
