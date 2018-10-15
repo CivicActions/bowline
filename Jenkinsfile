@@ -105,10 +105,10 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
-                        sh 'docker-compose version'
-                        sh 'docker info'
-                        sh 'docker run hello-world'
+                        bat 'dir'
+                        bat 'docker info'
+                        bat 'docker run hello-world'
+                        bat 'docker-compose version'
                     }
                 }
             }
