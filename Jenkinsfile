@@ -104,7 +104,7 @@ pipeline {
                         label 'windows-server-2016-docker'
                     }
                     environment {
-                        Path = '%Path$;C:\\ProgramData\\chocolatey\\bin\\'
+                        Path = '%Path%;C:\\ProgramData\\chocolatey\\bin\\'
                     }
                     steps {
                         checkout scm
