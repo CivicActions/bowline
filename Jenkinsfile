@@ -1,10 +1,10 @@
 pipeline {
     agent none
     stages {
-        stage('Run Linux tests') {
+        stage('Run tests') {
             parallel {
-                stage('Test on Ubuntu 16.04') {
-                    agent {
+                stage('Ubuntu 16.04') {
+                    agent { 
                         label 'ubuntu-1604'
                     }
                     steps {
@@ -17,8 +17,8 @@ pipeline {
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
-                stage('Test on Ubuntu 18.04') {
-                    agent {
+                stage('Ubuntu 18.04') {
+                    agent { 
                         label 'ubuntu-1804'
                     }
                     steps {
@@ -31,8 +31,8 @@ pipeline {
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
-                stage('Test on Ubuntu 16.04 with latest Docker') {
-                    agent {
+                stage('Ubuntu 16.04 with latest Docker') {
+                    agent { 
                         label 'ubuntu-1604-latest-docker'
                     }
                     steps {
@@ -45,8 +45,8 @@ pipeline {
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
-                stage('Test on Ubuntu 18.04 with latest Docker') {
-                    agent {
+                stage('Ubuntu 18.04 with latest Docker') {
+                    agent { 
                         label 'ubuntu-1804-latest-docker'
                     }
                     steps {
@@ -59,8 +59,8 @@ pipeline {
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
-                stage('Test on CentOS 7') {
-                    agent {
+                stage('CentOS 7') {
+                    agent { 
                         label 'centos-7'
                     }
                     steps {
@@ -73,8 +73,8 @@ pipeline {
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
-                stage('Test on CentOS 7 with latest Docker') {
-                    agent {
+                stage('CentOS 7 with latest Docker') {
+                    agent { 
                         label 'centos-7-latest-docker'
                     }
                     steps {
@@ -97,6 +97,24 @@ pipeline {
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
+                    }
+                }
+                stage('Windows Server 2016 with Docker') {
+                    agent { 
+                        label 'windows-server-2016-docker'
+                    }
+                    environment {
+                        PATH = "${env.PATH};${env.ALLUSERSPROFILE}\\chocolatey\\bin"
+                    }
+                    steps {
+                        checkout scm
+                        echo "PATH : ${env.PATH}"
+                        bat '''@"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"'''
+                        bat 'choco install -y docker-compose'
+                        bat 'dir'
+                        bat 'docker info'
+                        bat 'docker run hello-world'
+                        bat 'docker-compose version'
                     }
                 }
             }
