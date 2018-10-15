@@ -1,7 +1,7 @@
 pipeline {
     agent none
     stages {
-        stage('Run Linux tests') {
+        stage('Run tests') {
             parallel {
                 stage('Ubuntu 16.04') {
                     agent { 
@@ -101,7 +101,7 @@ pipeline {
                 }
                 stage('Windows Server 2016 with Docker') {
                     agent { 
-                        label 'win-server-2016-docker'
+                        label 'windows-server-2016-docker'
                     }
                     steps {
                         checkout scm
