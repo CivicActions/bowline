@@ -1,0 +1,19 @@
+os:
+  - linux
+  - windows
+
+sudo: required
+
+language: shell
+
+services:
+  - docker
+
+before_install:
+- if [ "$TRAVIS_OS_NAME" = 'windows' ]; then choco install docker-compose; fi
+
+script:
+- docker-compose version
+- docker info
+- docker run hello-world
+
