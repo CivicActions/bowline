@@ -1,0 +1,15 @@
+os:
+  - linux
+  - osx
+  - windows
+
+sudo: required
+
+services:
+  - docker
+
+script:
+- docker-compose version
+- docker info
+- docker run hello-world
+
