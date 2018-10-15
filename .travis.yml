@@ -10,12 +10,7 @@ services:
   - docker
 
 before_install:
-- |
-  (
-    if [ "$TRAVIS_OS_NAME" = 'windows' ]; then
-      Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-Windows-x86_64.exe" -UseBasicParsing -OutFile $Env:ProgramFiles\docker\docker-compose.exe
-    fi 
-  )
+- pip install docker-compose
 
 script:
 - docker-compose.exe version
