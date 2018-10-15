@@ -105,7 +105,8 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        bat 'Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-Windows-x86_64.exe" -UseBasicParsing -OutFile $Env:ProgramFiles\\docker\\docker-compose.exe'
+                        bat '@"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\\chocolatey\\bin"'
+                        bat 'choco install docker-compose'
                         bat 'dir'
                         bat 'docker info'
                         bat 'docker run hello-world'
