@@ -104,11 +104,12 @@ pipeline {
                         label 'windows-server-2016-docker'
                     }
                     environment {
-                        Path = '%Path%;C:\\ProgramData\\chocolatey\\bin\\'
+                        PATH = "${env.PATH}:${env.ALLUSERSPROFILE}\\chocolatey\\bin"
                     }
                     steps {
                         checkout scm
-                        bat '''@"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\\chocolatey\\bin"'''
+                        echo "PATH : ${env.PATH}"
+                        bat '''@"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"'''
                         bat 'choco install -y docker-compose'
                         bat 'dir'
                         bat 'docker info'
