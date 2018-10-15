@@ -1,0 +1,12 @@
+version: "3"
+services:
+  single:
+    build:
+      context: .
+      dockerfile: Dockerfile.single
+  multiple:
+    build:
+      context: .
+      dockerfile: Dockerfile.multiple
+  test:
+    image: alpine:latest
