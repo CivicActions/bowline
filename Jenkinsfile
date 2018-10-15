@@ -105,6 +105,7 @@ pipeline {
                     }
                     steps {
                         checkout scm
+                        bat 'choco install docker-compose'
                         bat 'dir'
                         bat 'docker info'
                         bat 'docker run hello-world'
