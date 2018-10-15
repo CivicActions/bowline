@@ -105,7 +105,7 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        bat 'choco install docker-compose'
+                        bat 'Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-Windows-x86_64.exe" -UseBasicParsing -OutFile $Env:ProgramFiles\docker\docker-compose.exe'
                         bat 'dir'
                         bat 'docker info'
                         bat 'docker run hello-world'
