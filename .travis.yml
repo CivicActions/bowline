@@ -1,5 +1,4 @@
 os:
-  - linux
   - windows
 
 sudo: required
@@ -9,8 +8,10 @@ language: shell
 services:
   - docker
 
+before_install:
+- choco install docker-compose
+
 script:
-- docker-compose.exe version
 - docker-compose version
 - docker info
 - docker run hello-world
