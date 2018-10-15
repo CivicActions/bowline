@@ -103,6 +103,9 @@ pipeline {
                     agent { 
                         label 'windows-server-2016-docker'
                     }
+                    environment {
+                        Path = '%Path$;C:\\ProgramData\\chocolatey\\bin\\'
+                    }
                     steps {
                         checkout scm
                         powershell '''Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))'''
