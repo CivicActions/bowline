@@ -38,12 +38,28 @@ func getComposeExposedCommands(composeFiles []string) (map[string]string, error)
 
 	for svcName, s := range c.ServiceConfigs {
 		if s.Image != "" {
-			fmt.Printf("%s, %s\n", svcName, s.Image)
+			fmt.Printf("\nsvcname, image: %s, %s\n", svcName, s.Image)
 			image, _, err := docker.ImageInspectWithRaw(context.Background(), s.Image)
 			if err != nil {
 				return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", s.Image, svcName, err)
 			}
 			fmt.Println(image.Config.Labels)
+		} else {
+			imgName := "bowline_inspect_" + svcName
+			fmt.Printf("\nsvcname, image: %s, %s\n", svcName, s.Image)
+			image, _, err := docker.ImageInspectWithRaw(context.Background(), imgName)
+			if err != nil {
+				return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", s.Image, svcName, err)
+			}
+			fmt.Println(image.Config.Labels)
+			for label, value := range image.Config.Labels {
+				if label == "expose.command.multiplecommand" {
+					fmt.Printf("docker run --rm %s %s", imgName, value)
+				}
+				if strings.HasPrefix(label, "expose.command.multiple.") {
+					fmt.Printf("alias %s %s\n", label)
+				}
+			}
 		}
 	}
 	return commands, nil
@@ -65,7 +81,7 @@ func initCompose(composeFiles []string) error {
 	}
 
 	out.Reset()
-	build := append(args, "build", "--pull")
+	build := append(args, "--project-name=bowline_inspect", "build", "--pull")
 	cmd = exec.Command("docker-compose", build...)
 	cmd.Stderr = &out
 	cmd.Stdout = &out
