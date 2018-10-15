@@ -1,4 +1,5 @@
 os:
+  - linux
   - windows
 
 sudo: required
@@ -9,7 +10,7 @@ services:
   - docker
 
 before_install:
-- choco install docker-compose
+- if [ "$TRAVIS_OS_NAME" = 'windows' ]; then choco install docker-compose; fi
 
 script:
 - docker-compose version
