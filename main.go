@@ -8,24 +8,15 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/CivicActions/bowline/compose"
 	"github.com/docker/docker/client"
-	"github.com/kubernetes/kompose/pkg/kobject"
-	"github.com/kubernetes/kompose/pkg/loader"
 )
 
 func getComposeExposedCommands(composeFiles []string) (map[string]string, error) {
 	commands := make(map[string]string)
 
-	// Loader parses input from file into komposeObject.
-	l, err := loader.GetLoader("compose")
-	if err != nil {
-		return commands, fmt.Errorf("Could not load compose parser: %s", err)
-	}
-
-	c := kobject.KomposeObject{
-		ServiceConfigs: make(map[string]kobject.ServiceConfig),
-	}
-	c, err = l.LoadFile(composeFiles)
+	// Loader parses input from file.
+	c, err := compose.LoadFile(composeFiles)
 	if err != nil {
 		return commands, fmt.Errorf("Could not load compose file: %s", err)
 	}
@@ -36,24 +27,25 @@ func getComposeExposedCommands(composeFiles []string) (map[string]string, error)
 		return commands, fmt.Errorf("Could not initialize Docker client: %s", err)
 	}
 
-	for svcName, s := range c.ServiceConfigs {
+	for _, s := range c.Services {
 		if s.Image != "" {
-			fmt.Printf("\nsvcname, image: %s, %s\n", svcName, s.Image)
+			fmt.Printf("\nsvcname, image: %s, %s\n", s.Name, s.Image)
 			image, _, err := docker.ImageInspectWithRaw(context.Background(), s.Image)
 			if err != nil {
-				return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", s.Image, svcName, err)
+				return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", s.Image, s.Name, err)
 			}
 			fmt.Println(image.Config.Labels)
 		} else {
-			imgName := "bowline_inspect_" + svcName
-			fmt.Printf("\nsvcname, image: %s, %s\n", svcName, s.Image)
+			imgName := "bowline_inspect_" + s.Name
+			fmt.Printf("\nsvcname, image: %s, %s\n", s.Name, s.Image)
 			image, _, err := docker.ImageInspectWithRaw(context.Background(), imgName)
 			if err != nil {
-				return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", s.Image, svcName, err)
+				return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", s.Image, s.Name, err)
 			}
 			fmt.Println(image.Config.Labels)
 			for label, value := range image.Config.Labels {
 				if label == "expose.command.multiplecommand" {
+					// TODO: Use docker.ContainerExecCreate (I think) to execute the command in the image.
 					fmt.Printf("docker run --rm %s %s", imgName, value)
 				}
 				if strings.HasPrefix(label, "expose.command.multiple.") {
