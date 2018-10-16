@@ -157,4 +157,5 @@ func main() {
 	for alias, command := range commands {
 		fmt.Printf("alias %s='%s'\n", alias, command)
 	}
+	fmt.Println("export BOWLINE_ACTIVATED=1")
 }
