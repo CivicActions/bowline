@@ -26,8 +26,9 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        dir 'fixtures'
-                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir('fixtures') {
+                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        }
                     }
                 }
                 stage('Ubuntu 18.04') {
@@ -42,8 +43,9 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        dir 'fixtures'
-                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir('fixtures') {
+                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        }
                     }
                 }
                 stage('Ubuntu 16.04 with latest Docker') {
@@ -58,8 +60,9 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        dir 'fixtures'
-                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir('fixtures') {
+                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        }
                     }
                 }
                 stage('Ubuntu 18.04 with latest Docker') {
@@ -74,8 +77,9 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        dir 'fixtures'
-                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir('fixtures') {
+                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        }
                     }
                 }
                 stage('CentOS 7') {
@@ -90,8 +94,9 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        dir 'fixtures'
-                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir('fixtures') {
+                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        }
                     }
                 }
                 stage('CentOS 7 with latest Docker') {
@@ -106,8 +111,9 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        dir 'fixtures'
-                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir('fixtures') {
+                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        }
                     }
                 }
                 stage('Test on OS X 10') {
@@ -122,8 +128,10 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        dir 'fixtures'
-                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir('fixtures') {
+                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        }
+
                     }
                 }
                 stage('Windows Server 2016 with Docker') {
@@ -141,7 +149,9 @@ pipeline {
                         bat 'dir'
                         bat 'docker-compose version'
                         bat 'docker info'
-                        dir 'fixtures'
+                        dir('fixtures') {
+                            bat 'dir'
+                        }
                     }
                 }
             }
