@@ -2,14 +2,11 @@ pipeline {
     agent none
     stages {
         stage('Build and push image') {
-            when { branch 'master' }
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'civicactionsjenkins') {
-                        def latestImage = docker.build("civicactions-internal-it/home", "--build-arg GATSBY_JAZZ_URL=${GATSBY_JAZZ_URL} .")
-                        latestImage.push("latest")
-                        latestImage.push("${env.GIT_COMMIT}-${env.BUILD_NUMBER}")
-                        slackSend channel: 'marketing-home', message: "Master branch built and image pushed successfully to Docker registry"
+                        def latestImage = docker.build("civicactions/bowline-ci", ".")
+                        latestImage.push("${env.CHANGE_ID}-${env.BUILD_NUMBER}")
                     }
                 }
             }
