@@ -1,5 +1,5 @@
 FROM alpine:3.8
 
 LABEL expose.command.multiplecommand="find /usr/bin -name 'sha*'"
-LABEL expose.command.multiple.sha256="/usr/bin/sha256"
+LABEL expose.command.multiple.cksum="/usr/bin/cksum"
 LABEL expose.command.multiple.md5sum="/usr/bin/md5sum"
