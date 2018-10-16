@@ -49,7 +49,8 @@ func getComposeExposedCommands(composeFiles []string) (map[string]string, error)
 					fmt.Printf("docker run --rm %s %s", imgName, value)
 				}
 				if strings.HasPrefix(label, "expose.command.multiple.") {
-					fmt.Printf("alias %s %s\n", label)
+					label = strings.TrimPrefix(label, "expose.command.multiple.")
+					commands[label] = fmt.Sprintf("docker-compose run --rm %s %s", s.Name, value)
 				}
 			}
 		}
@@ -91,10 +92,13 @@ func main() {
 		fmt.Printf("echo -e 'Error running docker-compose initialization: %q'", err)
 		os.Exit(1)
 	}
-	_, err = getComposeExposedCommands(composeFiles)
+	commands, err := getComposeExposedCommands(composeFiles)
 	if err != nil {
 		fmt.Println("echo -e 'Error generating aliases: %q'", err)
 		os.Exit(1)
 	}
-	//fmt.Println(aliases)
+	fmt.Println(commands)
+	for alias, command := range commands {
+		fmt.Printf("alias %s='%s'\n", alias, command)
+	}
 }
