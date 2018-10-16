@@ -65,10 +65,10 @@ func LoadFile(files []string) (Config, error) {
 	// Use libcompose for 1 or 2
 	// If blank, it's assumed it's 1 or 2
 	case "", "1", "1.0", "2", "2.0":
-		// komposeObject, err := parseV1V2(files)
-		// if err != nil {
-		// 	return config, err
-		// }
+		config, err := parseV1V2(files)
+		if err != nil {
+			return config, err
+		}
 		return config, nil
 		// Use docker/cli for 3
 	case "3", "3.0", "3.1", "3.2", "3.3":
