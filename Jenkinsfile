@@ -26,8 +26,8 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        sh 'docker run hello-world'
-                        sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir 'fixtures'
+                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Ubuntu 18.04') {
@@ -42,8 +42,8 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        sh 'docker run hello-world'
-                        sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir 'fixtures'
+                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Ubuntu 16.04 with latest Docker') {
@@ -58,8 +58,8 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        sh 'docker run hello-world'
-                        sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir 'fixtures'
+                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Ubuntu 18.04 with latest Docker') {
@@ -74,8 +74,8 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        sh 'docker run hello-world'
-                        sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir 'fixtures'
+                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('CentOS 7') {
@@ -90,8 +90,8 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        sh 'docker run hello-world'
-                        sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir 'fixtures'
+                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('CentOS 7 with latest Docker') {
@@ -106,8 +106,8 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        sh 'docker run hello-world'
-                        sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
+                        dir 'fixtures'
+                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on OS X 10') {
@@ -122,7 +122,8 @@ pipeline {
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
-                        sh 'docker run hello-world'
+                        dir 'fixtures'
+                        sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Windows Server 2016 with Docker') {
@@ -135,13 +136,12 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        echo "PATH : ${env.PATH}"
                         bat '''@"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"'''
                         bat 'choco install -y docker-compose'
                         bat 'dir'
-                        bat 'docker info'
-                        bat 'docker run hello-world'
                         bat 'docker-compose version'
+                        bat 'docker info'
+                        dir 'fixtures'
                     }
                 }
             }
