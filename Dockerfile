@@ -1,15 +1,20 @@
 # Build image
 FROM golang:alpine as builder
 
-# Get specific docker library version
-RUN apk add --no-cache git && \
-    git clone --single-branch -b v18.06.1-ce https://github.com/docker/engine.git $GOPATH/src/github.com/docker/docker
+# Systemwide setup
+ENV GO111MODULE=on
+RUN apk add --no-cache git gcc musl-dev
 
 WORKDIR /go/src/bowline
 
-COPY main.go .
+# Build (rarely changing) module cache
+COPY go.mod go.sum ./
+RUN go mod download
 
-RUN go get -v && go install -v
+# Build code files
+COPY main.go ./
+COPY compose ./compose
+RUN go install -v
 
 
 # Bowline image
@@ -20,7 +25,6 @@ COPY --from=builder /go/bin/bowline /usr/bin/bowline
 
 # Install latest version of Docker Compose
 RUN apk add py-pip && pip install docker-compose
-
 
 WORKDIR /src
 ENTRYPOINT /usr/bin/bowline
