@@ -7,7 +7,7 @@ pipeline {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         def latestImage = docker.build("civicactions/bowline-ci", ".")
-                        latestImage.push("${env.CHANGE_ID}-${env.BUILD_NUMBER}")
+                        latestImage.push("${env.GIT_COMMIT}")
                     }
                 }
             }
@@ -18,13 +18,15 @@ pipeline {
                     agent { 
                         label 'ubuntu-1604'
                     }
+                    environment {
+                        BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
+                    }
                     steps {
                         checkout scm
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
-                        sh 'docker build -t civicactions/bowline .'
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
@@ -32,13 +34,15 @@ pipeline {
                     agent { 
                         label 'ubuntu-1804'
                     }
+                    environment {
+                        BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
+                    }
                     steps {
                         checkout scm
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
-                        sh 'docker build -t civicactions/bowline .'
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
@@ -46,13 +50,15 @@ pipeline {
                     agent { 
                         label 'ubuntu-1604-latest-docker'
                     }
+                    environment {
+                        BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
+                    }
                     steps {
                         checkout scm
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
-                        sh 'docker build -t civicactions/bowline .'
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
@@ -60,13 +66,15 @@ pipeline {
                     agent { 
                         label 'ubuntu-1804-latest-docker'
                     }
+                    environment {
+                        BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
+                    }
                     steps {
                         checkout scm
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
-                        sh 'docker build -t civicactions/bowline .'
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
@@ -74,13 +82,15 @@ pipeline {
                     agent { 
                         label 'centos-7'
                     }
+                    environment {
+                        BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
+                    }
                     steps {
                         checkout scm
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
-                        sh 'docker build -t civicactions/bowline .'
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
@@ -88,19 +98,24 @@ pipeline {
                     agent { 
                         label 'centos-7-latest-docker'
                     }
+                    environment {
+                        BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
+                    }
                     steps {
                         checkout scm
                         sh 'ls -la'
                         sh 'docker-compose version'
                         sh 'docker info'
                         sh 'docker run hello-world'
-                        sh 'docker build -t civicactions/bowline .'
                         sh '. ./activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
                     }
                 }
                 stage('Test on OS X 10') {
                     agent { 
                         label 'osx-10-docker'
+                    }
+                    environment {
+                        BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
                     }
                     steps {
                         checkout scm
@@ -116,6 +131,7 @@ pipeline {
                     }
                     environment {
                         PATH = "${env.PATH};${env.ALLUSERSPROFILE}\\chocolatey\\bin"
+                        BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
                     }
                     steps {
                         checkout scm
