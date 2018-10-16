@@ -1,0 +1,10 @@
+single:
+  build: Dockerfile.single
+  labels:
+    expose.command.single: testcommand
+multiple:
+  build: Dockerfile.multiple
+  labels:
+    expose.command.multiple.test: testcommand
+test:
+  image: alpine:latest
