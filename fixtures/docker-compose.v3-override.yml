@@ -1,0 +1,5 @@
+version: "3"
+services:
+  multiple:
+    labels:
+      expose.command.multiple.override: newcommand
