@@ -2,6 +2,7 @@ pipeline {
     agent none
     stages {
         stage('Build and push image') {
+            agent any
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'civicactionsjenkins') {
