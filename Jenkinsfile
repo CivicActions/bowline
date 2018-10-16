@@ -5,7 +5,7 @@ pipeline {
             agent any
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'civicactionsjenkins') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         def latestImage = docker.build("civicactions/bowline-ci", ".")
                         latestImage.push("${env.CHANGE_ID}-${env.BUILD_NUMBER}")
                     }
