@@ -58,6 +58,11 @@ func getContainerOutput(docker *client.Client, ctx context.Context, image string
 		lines = append(lines, scanner.Text())
 	}
 
+	err = docker.ContainerRemove(ctx, resp.ID, types.ContainerRemoveOptions{})
+	if err != nil {
+		return lines, err
+	}
+
 	if err := scanner.Err(); err != nil {
 		return lines, err
 	}
