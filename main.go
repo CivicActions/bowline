@@ -151,7 +151,7 @@ func main() {
 	}
 	commands, err := getComposeExposedCommands(composeFiles)
 	if err != nil {
-		fmt.Println("echo -e 'Error generating aliases: %q'", err)
+		fmt.Printf("echo -e 'Error generating aliases: %q'", err)
 		os.Exit(1)
 	}
 	for alias, command := range commands {
