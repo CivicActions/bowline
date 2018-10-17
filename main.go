@@ -113,6 +113,9 @@ func getComposeExposedCommands(composeFiles []string) (map[string]string, error)
 				label = strings.TrimPrefix(label, "expose.command.multiple.")
 				commands[label] = fmt.Sprintf("docker-compose run --rm %s %s", s.Name, value)
 			}
+			if strings.HasPrefix(label, "expose.command.single") {
+				commands[value] = fmt.Sprintf("docker-compose run --rm %s", s.Name)
+			}
 		}
 	}
 	return commands, nil
