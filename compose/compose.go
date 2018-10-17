@@ -66,6 +66,7 @@ func LoadFile(files []string) (Config, error) {
 	// If blank, it's assumed it's 1 or 2
 	case "", "1", "1.0", "2", "2.0":
 		config, err := parseV1V2(files)
+		config.Version = version
 		if err != nil {
 			return config, err
 		}
@@ -73,6 +74,7 @@ func LoadFile(files []string) (Config, error) {
 		// Use docker/cli for 3
 	case "3", "3.0", "3.1", "3.2", "3.3":
 		config, err := parseV3(files)
+		config.Version = version
 		if err != nil {
 			return config, err
 		}
@@ -138,7 +140,6 @@ func parseV1V2(files []string) (Config, error) {
 	}
 
 	// Map the parsed config to a struct we understand.
-	config.Version = "2.0"
 	for name, service := range composeObject.ServiceConfigs.All() {
 		config.Services = append(config.Services, ServiceConfig{
 			Name:          name,
@@ -211,7 +212,6 @@ func parseV3(files []string) (Config, error) {
 		return config, err
 	}
 
-	config.Version = composeConfig.Version
 	for _, service := range composeConfig.Services {
 		config.Services = append(config.Services, ServiceConfig{
 			Name:          service.Name,
