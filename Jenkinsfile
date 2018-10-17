@@ -37,6 +37,8 @@ pipeline {
                     }
                     environment {
                         BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
+                        // Force older API version, since the Docker server here is too old.
+                        DOCKER_API_VERSION = '1.35'
                     }
                     steps {
                         checkout scm
