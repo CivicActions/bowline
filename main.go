@@ -80,35 +80,38 @@ func getComposeExposedCommands(composeFiles []string) (map[string]string, error)
 	}
 
 	for _, s := range c.Services {
+		var imgName string
 		if s.Image != "" {
 			_, _, err := docker.ImageInspectWithRaw(context.Background(), s.Image)
 			if err != nil {
 				return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", s.Image, s.Name, err)
 			}
+			imgName = s.Image
 		} else {
-			imgName := "bowline_inspect_" + s.Name
-			image, _, err := docker.ImageInspectWithRaw(context.Background(), imgName)
-			if err != nil {
-				return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", s.Image, s.Name, err)
+			imgName = "bowline_inspect_" + s.Name
+		}
+		image, _, err := docker.ImageInspectWithRaw(context.Background(), imgName)
+		if err != nil {
+			return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", imgName, s.Name, err)
+		}
+		// TODO: Merge in compose and image labels here.
+		mergedLabels := mergeLabelMaps(image.Config.Labels, s.Labels)
+		for label, value := range mergedLabels {
+			if strings.HasPrefix(label, "expose.command.multiplecommand") {
+				label = strings.TrimPrefix(strings.TrimPrefix(label, "expose.command.multiplecommand"), ".")
+				lines, err := getContainerOutput(docker, ctx, imgName, value)
+				if err != nil {
+					return commands, fmt.Errorf("Could not run multiplecommand %s (%s) on image %s: %s", label, value, imgName, err)
+				}
+				for _, line := range lines {
+					cmdParts := strings.SplitN(line, " ", 1)
+					_, cmd := path.Split(cmdParts[0])
+					commands[cmd] = fmt.Sprintf("docker-compose run --rm %s %s", s.Name, line)
+				}
 			}
-			// TODO: Merge in compose labels here.
-			for label, value := range image.Config.Labels {
-				if strings.HasPrefix(label, "expose.command.multiplecommand") {
-					label = strings.TrimPrefix(strings.TrimPrefix(label, "expose.command.multiplecommand"), ".")
-					lines, err := getContainerOutput(docker, ctx, imgName, value)
-					if err != nil {
-						return commands, fmt.Errorf("Could not run multiplecommand %s (%s) on image %s: %s", label, value, imgName, err)
-					}
-					for _, line := range lines {
-						cmdParts := strings.SplitN(line, " ", 1)
-						_, cmd := path.Split(cmdParts[0])
-						commands[cmd] = fmt.Sprintf("docker-compose run --rm %s %s", cmd, line)
-					}
-				}
-				if strings.HasPrefix(label, "expose.command.multiple.") {
-					label = strings.TrimPrefix(label, "expose.command.multiple.")
-					commands[label] = fmt.Sprintf("docker-compose run --rm %s %s", s.Name, value)
-				}
+			if strings.HasPrefix(label, "expose.command.multiple.") {
+				label = strings.TrimPrefix(label, "expose.command.multiple.")
+				commands[label] = fmt.Sprintf("docker-compose run --rm %s %s", s.Name, value)
 			}
 		}
 	}
@@ -140,6 +143,16 @@ func initCompose(composeFiles []string) error {
 		return fmt.Errorf("Docker-compose build failed:\n  %s", strings.Replace(out.String(), "\n", "\n  ", -1))
 	}
 	return nil
+}
+
+func mergeLabelMaps(maps ...map[string]string) map[string]string {
+	result := make(map[string]string)
+	for _, m := range maps {
+		for k, v := range m {
+			result[k] = v
+		}
+	}
+	return result
 }
 
 func main() {
