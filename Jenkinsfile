@@ -119,8 +119,9 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'bash --login -i ./tests/test.sh'
-                        sh 'bash --login --posix -i ./tests/test.sh'
+                        // OS X appears to have an old bash and needs expand_aliases to test.
+                        sh 'bash -O expand_aliases ./tests/test.sh'
+                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
                         // TODO: Add more test.sh once dash/zsh/mksh are installed
                     }
                 }
