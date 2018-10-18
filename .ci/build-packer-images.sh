@@ -16,4 +16,4 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-packer build jenkins-agent.json
+packer build jenkins-agents.json

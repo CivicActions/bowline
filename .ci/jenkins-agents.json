@@ -86,8 +86,9 @@
     {
       "type": "shell",
       "inline": [
+        "sudo rm -rf /var/lib/apt/lists/*",
         "sudo apt-get update",
-        "sudo apt-get install -y default-jdk docker.io",
+        "sudo apt-get install -y default-jre docker.io zsh mksh",
         "sudo adduser --disabled-password --gecos '' jenkins",
         "sudo usermod -aG docker jenkins"
       ],
@@ -99,8 +100,9 @@
     {
       "type": "shell",
       "inline": [
+        "sudo rm -rf /var/lib/apt/lists/*",
         "sudo apt-get update",
-        "sudo apt-get install -y default-jdk",
+        "sudo apt-get install -y default-jre zsh mksh",
         "curl -fsSL https://get.docker.com -o get-docker.sh",
         "sudo sh get-docker.sh",
         "sudo adduser --disabled-password --gecos '' jenkins",
@@ -115,7 +117,7 @@
       "type": "shell",
       "inline": [
         "sudo yum -y update",
-        "sudo yum -y install git docker java-1.8.0-openjdk",
+        "sudo yum -y install git docker java-1.8.0-openjdk zsh mksh",
         "sudo systemctl enable docker.service",
         "sudo groupadd docker",
         "sudo adduser jenkins",
@@ -129,7 +131,7 @@
       "type": "shell",
       "inline": [
         "sudo yum -y update",
-        "sudo yum -y install git java-1.8.0-openjdk",
+        "sudo yum -y install git java-1.8.0-openjdk zsh mksh",
         "curl -fsSL https://get.docker.com -o get-docker.sh",
         "sudo sh get-docker.sh",
         "sudo systemctl enable docker.service",
