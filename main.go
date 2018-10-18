@@ -164,11 +164,6 @@ func mergeLabelMaps(maps ...map[string]string) map[string]string {
 }
 
 func main() {
-	if len(os.Args) > 1 && strings.Contains(os.Args[1], "activate") {
-		fmt.Printf("echo -e \"ERROR: It looks like you are running this activate script directly. \nInstead, source this file to activate your shell session (note the '.'):\n\n  . activate\n\"")
-		os.Exit(1)
-	}
-
 	composeFiles := []string{"docker-compose.yml"}
 	err := initCompose(composeFiles)
 	if err != nil {
