@@ -184,4 +184,10 @@ func main() {
 		fmt.Printf("alias %s='%s'\n", alias, command)
 	}
 	fmt.Println("export BOWLINE_ACTIVATED=1")
+	// Print some info to user.
+	keys := make([]string, 0, len(commands))
+	for key := range commands {
+		keys = append(keys, key)
+	}
+	fmt.Printf("echo -e 'Bowline activated.\nCommands added to shell: %q'\n", strings.Join(keys, ", "))
 }
