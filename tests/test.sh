@@ -6,10 +6,10 @@
 # to test (this will override the hashbang above) - e.g.: zsh ./tests/test.sh
 
 # Report some succinct version information for orientation when reading logs.
-python -mplatform # Easy cross-platform way to output kernel and distro
-echo "Shell $(ps -p $$ --no-headers -o comm=) ${BASH_VERSION}${ZSH_VERSION}${KSH_VERSION}"
-docker version --format 'Docker client {{.Client.Version}}'
+uname -a
+echo "Shell $(ps -p $$ -o pid,command | tail -n1 | awk '{print $2}') ${BASH_VERSION}${ZSH_VERSION}${KSH_VERSION}"
 docker version --format 'Docker server {{.Server.Version}}'
+docker version --format 'Docker client {{.Client.Version}}'
 docker-compose version | head -n1
 
 echo Starting test
