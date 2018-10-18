@@ -91,7 +91,6 @@ pipeline {
                         checkout scm
                         sh 'bash -O expand_aliases ./tests/test.sh'
                         sh 'bash --posix -O expand_aliases ./tests/test.sh'
-                        sh 'dash ./tests/test.sh'
                         sh 'zsh ./tests/test.sh'
                         sh 'mksh ./tests/test.sh'
                     }
@@ -107,7 +106,6 @@ pipeline {
                         checkout scm
                         sh 'bash -O expand_aliases ./tests/test.sh'
                         sh 'bash --posix -O expand_aliases ./tests/test.sh'
-                        sh 'dash ./tests/test.sh'
                         sh 'zsh ./tests/test.sh'
                         sh 'mksh ./tests/test.sh'
                     }
