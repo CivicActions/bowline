@@ -23,11 +23,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
+                        sh 'bash --login -i ./tests/test.sh'
+                        sh 'bash --login --posix -i ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
-                        sh 'zsh ./tests/test.sh'
-                        sh 'mksh ./tests/test.sh'
+                        sh 'zsh --login --interactive ./tests/test.sh'
+                        sh 'mksh -li ./tests/test.sh'
                     }
                 }
                 stage('Ubuntu 18.04') {
@@ -41,11 +41,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
+                        sh 'bash --login -i ./tests/test.sh'
+                        sh 'bash --login --posix -i ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
-                        sh 'zsh ./tests/test.sh'
-                        sh 'mksh ./tests/test.sh'
+                        sh 'zsh --login --interactive ./tests/test.sh'
+                        sh 'mksh -li ./tests/test.sh'
                     }
                 }
                 stage('Ubuntu 16.04 with latest Docker') {
@@ -57,11 +57,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
+                        sh 'bash --login -i ./tests/test.sh'
+                        sh 'bash --login --posix -i ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
-                        sh 'zsh ./tests/test.sh'
-                        sh 'mksh ./tests/test.sh'
+                        sh 'zsh --login --interactive ./tests/test.sh'
+                        sh 'mksh -li ./tests/test.sh'
                     }
                 }
                 stage('Ubuntu 18.04 with latest Docker') {
@@ -73,11 +73,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
+                        sh 'bash --login -i ./tests/test.sh'
+                        sh 'bash --login --posix -i ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
-                        sh 'zsh ./tests/test.sh'
-                        sh 'mksh ./tests/test.sh'
+                        sh 'zsh --login --interactive ./tests/test.sh'
+                        sh 'mksh -li ./tests/test.sh'
                     }
                 }
                 stage('CentOS 7') {
@@ -89,10 +89,10 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
-                        sh 'zsh ./tests/test.sh'
-                        sh 'mksh ./tests/test.sh'
+                        sh 'bash --login -i ./tests/test.sh'
+                        sh 'bash --login --posix -i ./tests/test.sh'
+                        sh 'zsh --login --interactive ./tests/test.sh'
+                        sh 'mksh -li ./tests/test.sh'
                     }
                 }
                 stage('CentOS 7 with latest Docker') {
@@ -104,10 +104,10 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
-                        sh 'zsh ./tests/test.sh'
-                        sh 'mksh ./tests/test.sh'
+                        sh 'bash --login -i ./tests/test.sh'
+                        sh 'bash --login --posix -i ./tests/test.sh'
+                        sh 'zsh --login --interactive ./tests/test.sh'
+                        sh 'mksh -li ./tests/test.sh'
                     }
                 }
                 stage('Test on OS X 10') {
@@ -119,8 +119,8 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
+                        sh 'bash --login -i ./tests/test.sh'
+                        sh 'bash --login --posix -i ./tests/test.sh'
                         // TODO: Add more test.sh once dash/zsh/mksh are installed
                     }
                 }
