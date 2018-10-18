@@ -24,7 +24,7 @@ pipeline {
                     steps {
                         checkout scm
                         sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
                         sh 'zsh ./tests/test.sh'
                         sh 'mksh ./tests/test.sh'
@@ -42,7 +42,7 @@ pipeline {
                     steps {
                         checkout scm
                         sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
                         sh 'zsh ./tests/test.sh'
                         sh 'mksh ./tests/test.sh'
@@ -58,7 +58,7 @@ pipeline {
                     steps {
                         checkout scm
                         sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
                         sh 'zsh ./tests/test.sh'
                         sh 'mksh ./tests/test.sh'
@@ -74,7 +74,7 @@ pipeline {
                     steps {
                         checkout scm
                         sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
                         sh 'zsh ./tests/test.sh'
                         sh 'mksh ./tests/test.sh'
@@ -90,7 +90,7 @@ pipeline {
                     steps {
                         checkout scm
                         sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
                         sh 'zsh ./tests/test.sh'
                         sh 'mksh ./tests/test.sh'
@@ -106,7 +106,7 @@ pipeline {
                     steps {
                         checkout scm
                         sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
                         sh 'dash ./tests/test.sh'
                         sh 'zsh ./tests/test.sh'
                         sh 'mksh ./tests/test.sh'
@@ -122,7 +122,7 @@ pipeline {
                     steps {
                         checkout scm
                         sh 'bash -O expand_aliases ./tests/test.sh'
-                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'bash --posix -O expand_aliases ./tests/test.sh'
                         // TODO: Add more test.sh once dash/zsh/mksh are installed
                     }
                 }
