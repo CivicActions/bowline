@@ -27,4 +27,4 @@ COPY --from=builder /go/bin/bowline /usr/bin/bowline
 RUN apk add py-pip && pip install docker-compose
 
 WORKDIR /src
-ENTRYPOINT /usr/bin/bowline
+ENTRYPOINT [ "/usr/bin/bowline" ]
