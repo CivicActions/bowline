@@ -12,17 +12,23 @@ docker version --format 'Docker server {{.Server.Version}}'
 docker version --format 'Docker client {{.Client.Version}}'
 docker-compose version | head -n1
 
-echo Starting test
-cd fixtures || exit 1
-. ../activate
+echo "Starting direct run test"
+if ! ./activate | grep -Fq 'Instead, source this file'; then
+  echo "ERROR: Activate did not report error when run directly"
+  exit 1
+fi
+
+echo "Starting main test"
+cd fixtures || exit 2
+. ../activate test
 if [ -z ${BOWLINE_ACTIVATED+x} ]; then
   echo "ERROR: Failed to activate"
-  exit 2
+  exit 3
 fi
 
 # Check functionality of an alias that will not exist elsewhere.
 if ! echo bowline | bowlinesum | grep -Fq '749335d2c792bd109c40eba7a7fccd75ede4da532c892cbf892d603665feea3f'; then
   echo "ERROR: Aliases not present"
-  exit 3
+  exit 4
 fi
 echo Success
