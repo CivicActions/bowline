@@ -23,12 +23,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
-                        sh 'docker-compose version'
-                        sh 'docker info'
-                        dir('fixtures') {
-                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
-                        }
+                        sh 'bash -O expand_aliases ./tests/test.sh'
+                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'dash ./tests/test.sh'
+                        sh 'zsh ./tests/test.sh'
+                        sh 'mksh ./tests/test.sh'
                     }
                 }
                 stage('Ubuntu 18.04') {
@@ -42,12 +41,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
-                        sh 'docker-compose version'
-                        sh 'docker info'
-                        dir('fixtures') {
-                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
-                        }
+                        sh 'bash -O expand_aliases ./tests/test.sh'
+                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'dash ./tests/test.sh'
+                        sh 'zsh ./tests/test.sh'
+                        sh 'mksh ./tests/test.sh'
                     }
                 }
                 stage('Ubuntu 16.04 with latest Docker') {
@@ -59,12 +57,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
-                        sh 'docker-compose version'
-                        sh 'docker info'
-                        dir('fixtures') {
-                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
-                        }
+                        sh 'bash -O expand_aliases ./tests/test.sh'
+                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'dash ./tests/test.sh'
+                        sh 'zsh ./tests/test.sh'
+                        sh 'mksh ./tests/test.sh'
                     }
                 }
                 stage('Ubuntu 18.04 with latest Docker') {
@@ -76,12 +73,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
-                        sh 'docker-compose version'
-                        sh 'docker info'
-                        dir('fixtures') {
-                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
-                        }
+                        sh 'bash -O expand_aliases ./tests/test.sh'
+                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'dash ./tests/test.sh'
+                        sh 'zsh ./tests/test.sh'
+                        sh 'mksh ./tests/test.sh'
                     }
                 }
                 stage('CentOS 7') {
@@ -93,12 +89,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
-                        sh 'docker-compose version'
-                        sh 'docker info'
-                        dir('fixtures') {
-                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
-                        }
+                        sh 'bash -O expand_aliases ./tests/test.sh'
+                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'dash ./tests/test.sh'
+                        sh 'zsh ./tests/test.sh'
+                        sh 'mksh ./tests/test.sh'
                     }
                 }
                 stage('CentOS 7 with latest Docker') {
@@ -110,12 +105,11 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
-                        sh 'docker-compose version'
-                        sh 'docker info'
-                        dir('fixtures') {
-                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
-                        }
+                        sh 'bash -O expand_aliases ./tests/test.sh'
+                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        sh 'dash ./tests/test.sh'
+                        sh 'zsh ./tests/test.sh'
+                        sh 'mksh ./tests/test.sh'
                     }
                 }
                 stage('Test on OS X 10') {
@@ -127,13 +121,9 @@ pipeline {
                     }
                     steps {
                         checkout scm
-                        sh 'ls -la'
-                        sh 'docker-compose version'
-                        sh 'docker info'
-                        dir('fixtures') {
-                            sh '. ../activate && if [ -z ${BOWLINE_ACTIVATED+x} ]; then echo ERROR: Failed to activate; exit 1; fi'
-                        }
-
+                        sh 'bash -O expand_aliases ./tests/test.sh'
+                        sh 'bash -O expand_aliases --posix ./tests/test.sh'
+                        // TODO: Add more test.sh once dash/zsh/mksh are installed
                     }
                 }
                 stage('Windows Server 2016 with Docker') {
@@ -143,17 +133,33 @@ pipeline {
                     environment {
                         PATH = "${env.PATH};${env.ALLUSERSPROFILE}\\chocolatey\\bin"
                         BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
+                        COMPOSE_CONVERT_WINDOWS_PATHS = "1"
                     }
                     steps {
+                        // TODO: Switch to test.sh
                         checkout scm
                         bat '''@"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"'''
-                        bat 'choco install -y docker-compose'
+                        bat 'choco install -y docker-compose cygwin'
                         bat 'dir'
                         bat 'docker-compose version'
                         bat 'docker info'
-                        dir('fixtures') {
-                            bat 'dir'
-                        }
+                        //dir('fixtures') {
+                        // Windows shell notes
+                        //  With COMPOSE_CONVERT_WINDOWS_PATHS above, docker command works
+                        //  $PWD does not exist (cd gets correct path) and alias command is different
+                        //
+                        // Git bash notes TERM="cygwin" plus EXEPATH=c:\Program Files\Git\bin 
+                        //    bat '''"%PROGRAMFILES%\\Git\\bin\\bash.exe"'''
+                        //  May need COMPOSE_CONVERT_WINDOWS_PATHS prefix for docker command
+                        //  $PWD is incorrect - uses /c/path - can use `cmd //c cd` to get right path
+                        //
+                        // Cygwin notes TERM="cygwin"
+                        //  Takes you out of existing directory (need to re-cd to bowline directory)
+                        //  for pwd you need to do cygpath -w "$(pwd)"
+                        // 
+                        // Babun notes
+                        // Wants to use it's own shell - too hard to test automatically.
+                        //}
                     }
                 }
             }
