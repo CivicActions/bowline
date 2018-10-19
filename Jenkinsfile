@@ -137,13 +137,8 @@ pipeline {
                         checkout scm
                         bat '''@"%SystemRoot%\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"'''
                         bat 'choco install -y docker-compose cygwin'
-                        bat 'dir'
-                        bat 'docker-compose version'
-                        bat 'docker info'
-                        dir('fixtures') {
-                            bat '"%PROGRAMFILES%\\Git\\bin\\bash.exe" -O expand_aliases ./tests/test.sh'
-                            bat 'set PATH=C:\\tools\\cygwin\\bin;%PATH% && c:\\tools\\cygwin\\bin\\bash.exe -O expand_aliases ./tests/test.sh'
-                        }
+                        bat '"%PROGRAMFILES%\\Git\\bin\\bash.exe" -O expand_aliases ./tests/test.sh'
+                        bat 'set PATH=C:\\tools\\cygwin\\bin;%PATH% && c:\\tools\\cygwin\\bin\\bash.exe -O expand_aliases ./tests/test.sh'
                     }
                 }
             }
