@@ -1,2 +1,2 @@
 #!/bin/echo ERROR: Don't run this script directly. Instead, source this file to activate (note the '.'): . 
-eval "$(docker run --rm --privileged -v //var/run/docker.sock:/var/run/docker.sock -v "$(cygpath -w "$(pwd)" 2> /dev/null || pwd)":/src -e DOCKER_API_VERSION "civicactions/bowline$BOWLINE_IMAGE_SUFFIX" "$0" "$@")"
+eval "$(docker run --rm -v //var/run/docker.sock:/var/run/docker.sock -v "$(cygpath -w "$(pwd)" 2> /dev/null || pwd)":/src -e DOCKER_API_VERSION "civicactions/bowline$BOWLINE_IMAGE_SUFFIX" "$0" "$@")"
