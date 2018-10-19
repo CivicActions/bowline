@@ -141,8 +141,8 @@ pipeline {
                         bat 'docker-compose version'
                         bat 'docker info'
                         dir('fixtures') {
-                            bat '''"%PROGRAMFILES%\Git\bin\bash.exe" -O expand_aliases ./tests/test.sh'''
-                            bat '''set PATH=C:\tools\cygwin\bin;%PATH% && c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh'''
+                            bat '"%PROGRAMFILES%\\Git\\bin\\bash.exe" -O expand_aliases ./tests/test.sh'
+                            bat 'set PATH=C:\\tools\\cygwin\\bin;%PATH% && c:\\tools\\cygwin\\bin\\bash.exe -O expand_aliases ./tests/test.sh'
                         }
                     }
                 }
