@@ -130,7 +130,7 @@ pipeline {
                         label 'windows-server-2016-docker'
                     }
                     environment {
-                        PATH = "${env.PATH};${env.ALLUSERSPROFILE}\\chocolatey\\bin"
+                        PATH = "${env.PATH};${env.ALLUSERSPROFILE}\\chocolatey\\bin;${env.PROGRAMFILES}\\Docker\\Docker"
                         BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
                     }
                     steps {
