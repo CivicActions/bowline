@@ -1,6 +1,10 @@
 {
   "variables": {
-    "project_id": "{{env `PROJECT`}}"
+    "project_id": "{{env `PROJECT`}}",
+    "azure_subscription_id": "{{env `AZURE_SUBSCRIPTION_ID`}}",
+    "azure_client_id": "{{env `AZURE_CLIENT_ID`}}",
+    "azure_client_secret": "{{env `AZURE_CLIENT_SECRET`}}",
+    "azure_tenant_id": "{{env `AZURE_TENANT_ID`}}"
   },
   "builders": [
     {
@@ -80,6 +84,27 @@
       "image_description": "CentOS 7 with upgraded docker.com edge Docker and all stable Docker Compose",
       "image_family": "jenkins-agent",
       "ssh_username": "packer"
+    },
+    {
+      "name": "windows-server-2016",
+      "type": "azure-arm",
+      "subscription_id": "{{user `azure_subscription_id`}}",
+      "client_id": "{{user `azure_client_id`}}",
+      "client_secret": "{{user `azure_client_secret`}}",
+      "location": "westus",
+      "tenant_id": "{{user `azure_tenant_id`}}",
+      "managed_image_resource_group_name": "jenkins",
+      "managed_image_name": "windows-server-2016-{{timestamp}}",
+      "os_type": "Windows",
+      "image_publisher": "MicrosoftWindowsServer",
+      "image_offer": "WindowsServer",
+      "image_sku": "2016-Datacenter",
+      "communicator": "winrm",
+      "winrm_use_ssl": true,
+      "winrm_insecure": true,
+      "winrm_timeout": "3m",
+      "winrm_username": "packer",
+      "vm_size": "Standard_D2_v3"
     }
   ],
   "provisioners": [
@@ -146,6 +171,44 @@
       "type": "shell",
       "scripts": [
         "./scripts/install-docker-compose.sh"
+      ],
+      "only": [
+        "ubuntu-1604",
+        "ubuntu-1804",
+        "ubuntu-1604-latest-docker",
+        "ubuntu-1804-latest-docker",
+        "centos-7",
+        "centos-7-latest-docker"
+      ]
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))",
+        "Enable-WindowsOptionalFeature -NoRestart -Online -FeatureName Microsoft-Hyper-V -All",
+        "Enable-WindowsOptionalFeature -NoRestart -Online -FeatureName Containers -All",
+        "choco install -y openssh -params '\"\/SSHServerFeature\"'",
+        "choco install -y git server-jre8 docker-for-windows docker-compose cygwin"
+        "Add-LocalGroupMember -Group docker-users -Member Administrators"
+      ],
+      "only": [
+        "windows-server-2016"
+      ]
+    },
+    {
+      "type": "windows-restart",
+      "only": [
+        "windows-server-2016"
+      ]
+    },
+    {
+      "type": "powershell",
+      "inline": [
+        "& $env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quiet /quit",
+        "while($true) { $imageState = Get-ItemProperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\State | Select ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }"
+      ],
+      "only": [
+        "windows-server-2016"
       ]
     }
   ]

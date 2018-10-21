@@ -6,7 +6,13 @@ if [ -z "$PROJECT" ]; then
   exit 1
 fi
 
-echo "This will build all Jenkins test agent GCE images and push them to your current gcloud project: '$PROJECT'."
+. .env
+if [ -z "$AZURE_CLIENT_SECRET" ]; then
+  echo 'Add the following credentials to your .env file and rerun: AZURE_TENANT_ID, AZURE_CLIENT_SECRET, AZURE_CLIENT_ID, AZURE_SUBSCRIPTION_ID'
+  exit 1
+fi
+
+echo "This will build all Jenkins test agent GCE and Azure images and push them to Azure and the gcloud project: '$PROJECT'."
 read -n 1 -s -r -p "Press any key to continue"
 echo
 
@@ -16,4 +22,4 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-packer build jenkins-agents.json
+#packer build jenkins-agents.json
