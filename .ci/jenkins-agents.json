@@ -91,7 +91,7 @@
       "subscription_id": "{{user `azure_subscription_id`}}",
       "client_id": "{{user `azure_client_id`}}",
       "client_secret": "{{user `azure_client_secret`}}",
-      "location": "westus",
+      "location": "centralus",
       "tenant_id": "{{user `azure_tenant_id`}}",
       "managed_image_resource_group_name": "jenkins",
       "managed_image_name": "windows-server-2016-{{timestamp}}",
@@ -189,7 +189,6 @@
         "Enable-WindowsOptionalFeature -NoRestart -Online -FeatureName Containers -All",
         "choco install -y openssh -params '\"\/SSHServerFeature\"'",
         "choco install -y git server-jre8 docker-for-windows docker-compose cygwin"
-        "Add-LocalGroupMember -Group docker-users -Member Administrators"
       ],
       "only": [
         "windows-server-2016"
@@ -204,8 +203,11 @@
     {
       "type": "powershell",
       "inline": [
+        "Start-Sleep -s 60",
+        "if( Test-Path $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml ){ rm $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml -Force}",
         "& $env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quiet /quit",
-        "while($true) { $imageState = Get-ItemProperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\State | Select ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }"
+        "while($true) { $imageState = Get-ItemProperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\State | Select ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }",
+        "Start-Sleep -s 60"
       ],
       "only": [
         "windows-server-2016"
