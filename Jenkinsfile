@@ -135,6 +135,7 @@ pipeline {
                     }
                     steps {
                         checkout scm
+                        powershell 'Get-WindowsOptionalFeature -Online'
                         powershell 'Add-LocalGroupMember -Group jenkins -Member Administrators'
                         powershell 'c:\\Program Files\\Docker\\Docker\\Docker for Windows.exe'
                         bat '''
