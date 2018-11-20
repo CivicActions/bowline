@@ -6,7 +6,9 @@ if [ -e "/proc/self/cgroup" ];then
 fi
 [ "$context" ] || export context="host"
 
-get_container_name () { echo "${SLUG}_${1}_1"; }
+get_container_name () {
+  docker-compose ps|grep "${SLUG}_${1}_1"|awk '{print $1}'
+}
 
 # Parses YML file and outputs key=value for each depth.
 # Usage: $(parse_yml filename prefix_to_add_to_key)
