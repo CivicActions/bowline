@@ -125,25 +125,16 @@ pipeline {
                         // TODO: Add more test.sh once dash/zsh/mksh are installed
                     }
                 }
-                stage('Windows Server 2016 with Docker') {
+                stage('Windows 10 with Docker') {
                     agent { 
-                        label 'windows-server-2016-docker'
+                        label 'windows-10-docker'
                     }
                     environment {
-                        PATH = "${env.PATH};${env.ALLUSERSPROFILE}\\chocolatey\\bin;${env.PROGRAMFILES}\\Docker\\Docker"
+                        PATH = "${env.PATH};${env.PROGRAMFILES}\\Docker\\Docker"
                         BOWLINE_IMAGE_SUFFIX = "-ci:${env.GIT_COMMIT}"
                     }
                     steps {
                         checkout scm
-                        powershell 'Get-WindowsOptionalFeature -Online'
-                        powershell 'Add-LocalGroupMember -Group jenkins -Member Administrators'
-                        powershell 'c:\\Program Files\\Docker\\Docker\\Docker for Windows.exe'
-                        bat '''
-                        START "" "c:\\Program Files\\Docker\\Docker\\Docker for Windows.exe"
-                        :repeat
-                        TIMEOUT /T 10
-                        docker ps || goto repeat
-                        '''
                         bat '"%PROGRAMFILES%\\Git\\bin\\bash.exe" -O expand_aliases ./tests/test.sh'
                         bat 'set PATH=C:\\tools\\cygwin\\bin;%PATH% && c:\\tools\\cygwin\\bin\\bash.exe -O expand_aliases ./tests/test.sh'
                     }
