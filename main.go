@@ -17,7 +17,7 @@ import (
 	shellquote "github.com/kballard/go-shellquote"
 )
 
-func getContainerOutput(docker *client.Client, ctx context.Context, image string, command string) ([]string, error) {
+func getContainerOutput(ctx context.Context, docker *client.Client, image string, command string) ([]string, error) {
 	var lines []string
 
 	// Split the string and parse values according to shell quoting rules.
@@ -104,7 +104,7 @@ func getComposeExposedCommands(composeFiles []string) (map[string]string, error)
 		for label, value := range mergedLabels {
 			if strings.HasPrefix(label, "expose.command.multiplecommand") {
 				label = strings.TrimPrefix(strings.TrimPrefix(label, "expose.command.multiplecommand"), ".")
-				lines, err := getContainerOutput(docker, ctx, imgName, value)
+				lines, err := getContainerOutput(ctx, docker, imgName, value)
 				if err != nil {
 					return commands, fmt.Errorf("Could not run multiplecommand %s (%s) on image %s: %s", label, value, imgName, err)
 				}
