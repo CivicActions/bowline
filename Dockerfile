@@ -1,5 +1,5 @@
 # Build image
-FROM golang:alpine as builder
+FROM golang:1.11.3-alpine as builder
 
 # Systemwide setup
 ENV GO111MODULE=on
