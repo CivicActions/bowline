@@ -7,7 +7,7 @@
 
 # Report some succinct version information for orientation when reading logs.
 uname -a
-echo "Shell $(ps -p $$ -o pid,command | tail -n1 | awk '{print $2}') ${BASH_VERSION}${ZSH_VERSION}${KSH_VERSION}"
+echo "Shell $(ps -p $$ | tail -n1 | awk '{print $NF}') ${BASH_VERSION}${ZSH_VERSION}${KSH_VERSION}"
 docker version --format 'Docker server {{.Server.Version}}'
 docker version --format 'Docker client {{.Client.Version}}'
 docker-compose version | head -n1
@@ -20,7 +20,7 @@ fi
 
 echo "Starting main test"
 cd fixtures || exit 2
-. ../activate test
+. ../activate
 if [ -z ${BOWLINE_ACTIVATED+x} ]; then
   echo "ERROR: Failed to activate"
   exit 3
