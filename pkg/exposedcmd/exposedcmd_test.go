@@ -1,4 +1,4 @@
-package bowline
+package exposedcmd
 
 import (
 	"os"
