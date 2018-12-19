@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/CivicActions/bowline/pkg/bowline"
+	"github.com/CivicActions/bowline/pkg/exposedcmd"
 )
 
 func initCompose(composeFiles []string) error {
@@ -44,7 +44,7 @@ func main() {
 		fmt.Printf("echo -e 'Error running docker-compose initialization: %q'", err)
 		os.Exit(1)
 	}
-	commands, err := bowline.GetComposeExposedCommands(composeFiles)
+	commands, err := exposedcmd.GetComposeExposedCommands(composeFiles)
 	if err != nil {
 		fmt.Printf("echo -e 'Error generating aliases: %q'", err)
 		os.Exit(1)
