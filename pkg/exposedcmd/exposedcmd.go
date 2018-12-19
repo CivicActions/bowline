@@ -1,4 +1,4 @@
-package bowline
+package exposedcmd
 
 import (
 	"bufio"
@@ -122,7 +122,6 @@ func GetComposeExposedCommands(composeFiles []string) (map[string]string, error)
 	}
 	return commands, nil
 }
-
 
 func mergeLabelMaps(maps ...map[string]string) map[string]string {
 	result := make(map[string]string)
