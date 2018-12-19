@@ -12,10 +12,10 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Build code files
-COPY main.go ./
-COPY compose ./compose
-RUN go install -v
-
+COPY pkg ./pkg
+COPY cmd ./cmd
+RUN ls -R
+RUN cd cmd/bowline ; go install -v
 
 # Bowline image
 FROM alpine:3.8
