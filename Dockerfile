@@ -14,8 +14,9 @@ RUN go mod download
 # Build code files
 COPY pkg ./pkg
 COPY cmd ./cmd
+COPY fixtures ./fixtures
 RUN ls -R
-RUN cd cmd/bowline ; go install -v
+RUN go test -v ./... ; go install -v ./...
 
 # Bowline image
 FROM alpine:3.8
