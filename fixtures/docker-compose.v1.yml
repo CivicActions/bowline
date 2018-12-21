@@ -1,5 +1,7 @@
 single:
   build: Dockerfile.single
+singleimg:
+  image: alpine:latest
   labels:
     expose.command.single: testcommand
 multiple:
