@@ -13,7 +13,7 @@ func AssertConfig(services Services, t *testing.T) {
 			if s.Image != "alpine:latest" {
 				t.Error(s.Image)
 			}
-		case "single":
+		case "singleimg":
 			if s.Labels["expose.command.single"] != "testcommand" {
 				t.Error(s.Labels)
 			}
