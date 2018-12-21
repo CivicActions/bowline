@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.single
+  singleimg:
+    image: alpine:latest
     labels:
       expose.command.single: testcommand
   multiple:
