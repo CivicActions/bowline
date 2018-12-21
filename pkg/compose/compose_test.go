@@ -26,7 +26,7 @@ func AssertConfig(services Services, t *testing.T) {
 }
 
 func TestV1Format(t *testing.T) {
-	os.Chdir("../fixtures")
+	os.Chdir("../../fixtures")
 	files := []string{"docker-compose.v1.yml"}
 	config, err := LoadFile(files)
 	if err != nil {
@@ -46,7 +46,7 @@ func TestV2Format(t *testing.T) {
 }
 
 func TestV3Format(t *testing.T) {
-	os.Chdir("../fixtures")
+	os.Chdir("../../fixtures")
 	files := []string{"docker-compose.yml"}
 	config, err := LoadFile(files)
 	if err != nil {
