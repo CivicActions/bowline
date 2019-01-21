@@ -18,6 +18,10 @@ COPY fixtures ./fixtures
 RUN ls -R
 RUN go test -v ./... ; go install -v ./...
 
+# Run golang ci lint
+RUN wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.12.5
+RUN golangci-lint run ./... ; echo Exit status: $?
+
 # Bowline image
 FROM alpine:3.8
 
