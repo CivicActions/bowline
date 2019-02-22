@@ -18,9 +18,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-//
-var StdinData []byte
-
 // We parse a very limited version of the compose file, based on just what we need from the v3 structs.
 type Config struct {
 	Version  string
@@ -256,14 +253,15 @@ func getComposeFileDir(inputFiles []string) (string, error) {
 
 // ReadFile read data from file or stdin
 func ReadFile(fileName string) ([]byte, error) {
+	// StdinData is used for reading compose config
+	var StdinData []byte
 	if fileName == "-" {
 		if StdinData == nil {
 			data, err := ioutil.ReadAll(os.Stdin)
 			StdinData = data
 			return data, err
-		} else {
-			return StdinData, nil
 		}
+		return StdinData, nil
 	}
 	return ioutil.ReadFile(fileName)
 }
