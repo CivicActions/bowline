@@ -26,7 +26,10 @@ func AssertConfig(services Services, t *testing.T) {
 }
 
 func TestV1Format(t *testing.T) {
-	os.Chdir("../../fixtures")
+	err := os.Chdir("../../fixtures")
+	if err != nil {
+		t.Errorf("could not change directory %s", err)
+	}
 	files := []string{"docker-compose.v1.yml"}
 	config, err := LoadFile(files)
 	if err != nil {
@@ -36,7 +39,10 @@ func TestV1Format(t *testing.T) {
 }
 
 func TestV2Format(t *testing.T) {
-	os.Chdir("../fixtures")
+	err := os.Chdir("../../fixtures")
+	if err != nil {
+		t.Errorf("could not change directory %s", err)
+	}
 	files := []string{"docker-compose.v2.yml"}
 	config, err := LoadFile(files)
 	if err != nil {
@@ -46,7 +52,10 @@ func TestV2Format(t *testing.T) {
 }
 
 func TestV3Format(t *testing.T) {
-	os.Chdir("../../fixtures")
+	err := os.Chdir("../../fixtures")
+	if err != nil {
+		t.Errorf("could not change directory %s", err)
+	}
 	files := []string{"docker-compose.yml"}
 	config, err := LoadFile(files)
 	if err != nil {

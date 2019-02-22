@@ -76,7 +76,7 @@ func GetComposeExposedCommands(composeFiles []string) (map[string]string, error)
 	}
 
 	ctx := context.Background()
-	docker, err := client.NewEnvClient()
+	docker, err := client.NewClientWithOpts()
 	if err != nil {
 		return commands, fmt.Errorf("Could not initialize Docker client: %s", err)
 	}
