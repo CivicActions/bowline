@@ -11,7 +11,7 @@ import (
 )
 
 func initCompose(composeFiles []string) error {
-	var args []string
+	args := make([]string, 0, len(composeFiles))
 	for _, f := range composeFiles {
 		args = append(args, "-f", f)
 	}
@@ -22,7 +22,7 @@ func initCompose(composeFiles []string) error {
 	cmd.Stdout = &out
 	err := cmd.Run()
 	if err != nil {
-		return fmt.Errorf("Docker-compose pull failed:\n  %s", strings.Replace(out.String(), "\n", "\n  ", -1))
+		return fmt.Errorf("docker-compose pull failed:\n  %s", strings.Replace(out.String(), "\n", "\n  ", -1))
 	}
 
 	out.Reset()
@@ -32,7 +32,7 @@ func initCompose(composeFiles []string) error {
 	cmd.Stdout = &out
 	err = cmd.Run()
 	if err != nil {
-		return fmt.Errorf("Docker-compose build failed:\n  %s", strings.Replace(out.String(), "\n", "\n  ", -1))
+		return fmt.Errorf("docker-compose build failed:\n  %s", strings.Replace(out.String(), "\n", "\n  ", -1))
 	}
 	return nil
 }

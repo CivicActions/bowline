@@ -72,13 +72,13 @@ func GetComposeExposedCommands(composeFiles []string) (map[string]string, error)
 	// Loader parses input from file.
 	c, err := compose.LoadFile(composeFiles)
 	if err != nil {
-		return commands, fmt.Errorf("Could not load compose file: %s", err)
+		return commands, fmt.Errorf("could not load compose file: %s", err)
 	}
 
 	ctx := context.Background()
 	docker, err := client.NewClientWithOpts()
 	if err != nil {
-		return commands, fmt.Errorf("Could not initialize Docker client: %s", err)
+		return commands, fmt.Errorf("could not initialize Docker client: %s", err)
 	}
 
 	for _, s := range c.Services {
@@ -86,7 +86,7 @@ func GetComposeExposedCommands(composeFiles []string) (map[string]string, error)
 		if s.Image != "" {
 			_, _, err := docker.ImageInspectWithRaw(context.Background(), s.Image)
 			if err != nil {
-				return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", s.Image, s.Name, err)
+				return commands, fmt.Errorf("could not inspect image %s for service %s: %s", s.Image, s.Name, err)
 			}
 			imgName = s.Image
 		} else {
@@ -94,7 +94,7 @@ func GetComposeExposedCommands(composeFiles []string) (map[string]string, error)
 		}
 		image, _, err := docker.ImageInspectWithRaw(context.Background(), imgName)
 		if err != nil {
-			return commands, fmt.Errorf("Could not inspect image %s for service %s: %s", imgName, s.Name, err)
+			return commands, fmt.Errorf("could not inspect image %s for service %s: %s", imgName, s.Name, err)
 		}
 		// TODO: Merge in compose and image labels here.
 		mergedLabels := mergeLabelMaps(image.Config.Labels, s.Labels)
@@ -103,7 +103,7 @@ func GetComposeExposedCommands(composeFiles []string) (map[string]string, error)
 				label = strings.TrimPrefix(strings.TrimPrefix(label, "expose.command.multiplecommand"), ".")
 				lines, err := getContainerOutput(ctx, docker, imgName, value)
 				if err != nil {
-					return commands, fmt.Errorf("Could not run multiplecommand %s (%s) on image %s: %s", label, value, imgName, err)
+					return commands, fmt.Errorf("could not run multiplecommand %s (%s) on image %s: %s", label, value, imgName, err)
 				}
 				for _, line := range lines {
 					cmdParts := strings.SplitN(line, " ", 1)
