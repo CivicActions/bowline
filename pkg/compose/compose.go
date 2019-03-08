@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	//nolint:goimports
 	"gopkg.in/yaml.v2"
 
 	"github.com/docker/cli/cli/compose/loader"
@@ -77,7 +78,7 @@ func LoadFile(files []string) (Config, error) {
 		}
 		return config, nil
 	default:
-		return config, fmt.Errorf("Version %s of Docker Compose is not supported. Please use version 1, 2 or 3", version)
+		return config, fmt.Errorf("version %s of Docker Compose is not supported. Please use version 1, 2 or 3", version)
 	}
 }
 
@@ -222,6 +223,7 @@ func parseV3(files []string) (Config, error) {
 }
 
 // converts os.Environ() ([]string) to map[string]string
+// nolint:lll
 // based on https://github.com/docker/cli/blob/5dd30732a23bbf14db1c64d084ae4a375f592cfa/cli/command/stack/deploy_composefile.go#L143
 func buildEnvironment() (map[string]string, error) {
 	env := os.Environ()
