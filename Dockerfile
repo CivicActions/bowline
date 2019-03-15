@@ -15,7 +15,6 @@ RUN go mod download
 COPY pkg ./pkg
 COPY cmd ./cmd
 COPY fixtures ./fixtures
-RUN ls -R
 RUN go test -v ./... ; go install -v ./...
 
 # Run golang ci lint
