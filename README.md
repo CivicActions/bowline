@@ -1,5 +1,19 @@
 # Bowline
 
+Bowline (since Version 2) is a tool that inspects docker images and exposes commands to the end user. This is convenient for a developer sandbox environment where developers need to run various cli tools in their process. Also in a CI environment it allows for simple, easy to read tasks such as `build` and `test`.
+This allows us to build all the tooling into a docker image instead of adding various scripts and tools outside of the docker ecosystem to achieve simple tasks.
+
+## Using Bowline in a project
+
+Using Bowline is only meaningful if you have at least one docker image that makes use of the [Exposed Commands API](exposed-commands-api.md). To "install" Bowline, simply add the activate file from this repo to your project. Run the following to activate the exposed commands in your docker images.
+
+```
+. activate
+```
+
+Note, currently Bowline only supports docker-compose based projects.
+
+
 ## Developing Bowline
 
 ```
