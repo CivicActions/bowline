@@ -22,13 +22,10 @@ RUN wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lin
 RUN golangci-lint run --enable-all ./...
 
 # Bowline image
-FROM alpine:3.8
+FROM docker/compose:1.24.0
 
 # Install bowline
 COPY --from=builder /go/bin/bowline /usr/bin/bowline
-
-# Install latest version of Docker Compose
-RUN apk add py-pip && pip install docker-compose
 
 WORKDIR /src
 ENTRYPOINT [ "/usr/bin/bowline" ]
