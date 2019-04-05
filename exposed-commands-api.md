@@ -6,7 +6,7 @@ Docker label keys used in this API are defined as follows:
 
 ## LABEL expose.command.single
 
-Expose a single command in the image. The command that is run is whatever is defined by the Dockerfile. The value of this label is the command exposed to the user interface.
+Expose a single command in the image. The value of this label is the command exposed to the user interface. When executed, this will execute the Docker image default command.
 
 ### Example
 
@@ -14,7 +14,7 @@ Expose a single command in the image. The command that is run is whatever is def
 FROM hello-world
 LABEL expose.command.single=hello
 ```
-The above label instruction should expose the command `hello` which runs the docker image with the hello-world message.
+The above label instruction will expose a command with the name `hello` which will run the docker image (with no arguments) resulting in a hello-world message.
 
 ## LABEL expose.command.multiple.*
 
@@ -31,7 +31,7 @@ An image with the above labels should make the `cksum` and the `md5sum` availabl
 
 ## LABEL expose.command.multiplecommand
 
-The value of this label should be a command that is run inside the image used to get a key-value list of exposed commands.
+The value of this label should be a command that is run inside the image used to get a key-value list of exposed commands. The command needs to be run independently without any mountpoints or docker-compose related dependencies.
 
 ### Example
 
