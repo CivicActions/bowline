@@ -1,4 +1,4 @@
 FROM alpine:3.8
 
-LABEL expose.command.single=bowlinesum
+LABEL exposed.command.single=bowlinesum
 ENTRYPOINT /usr/bin/sha256sum

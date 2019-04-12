@@ -7,12 +7,12 @@ services:
   singleimg:
     image: alpine:latest
     labels:
-      expose.command.single: testcommand
+      exposed.command.single: testcommand
   multiple:
     build:
       context: .
       dockerfile: Dockerfile.multiple
     labels:
-      expose.command.multiple.test: testcommand
+      exposed.command.multiple.test: testcommand
   test:
     image: alpine:latest
