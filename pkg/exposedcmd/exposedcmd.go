@@ -99,8 +99,8 @@ func GetComposeExposedCommands(composeFiles []string) (map[string]string, error)
 		// TODO: Merge in compose and image labels here.
 		mergedLabels := mergeLabelMaps(image.Config.Labels, s.Labels)
 		for label, value := range mergedLabels {
-			if strings.HasPrefix(label, "expose.command.multiplecommand") {
-				label = strings.TrimPrefix(strings.TrimPrefix(label, "expose.command.multiplecommand"), ".")
+			if strings.HasPrefix(label, "exposed.command.multiplecommand") {
+				label = strings.TrimPrefix(strings.TrimPrefix(label, "exposed.command.multiplecommand"), ".")
 				lines, err := getContainerOutput(ctx, docker, imgName, value)
 				if err != nil {
 					return commands, fmt.Errorf("could not run multiplecommand %s (%s) on image %s: %s", label, value, imgName, err)
@@ -111,11 +111,11 @@ func GetComposeExposedCommands(composeFiles []string) (map[string]string, error)
 					commands[cmd] = fmt.Sprintf("docker-compose run --rm %s %s", s.Name, line)
 				}
 			}
-			if strings.HasPrefix(label, "expose.command.multiple.") {
-				label = strings.TrimPrefix(label, "expose.command.multiple.")
+			if strings.HasPrefix(label, "exposed.command.multiple.") {
+				label = strings.TrimPrefix(label, "exposed.command.multiple.")
 				commands[label] = fmt.Sprintf("docker-compose run --rm %s %s", s.Name, value)
 			}
-			if strings.HasPrefix(label, "expose.command.single") {
+			if strings.HasPrefix(label, "exposed.command.single") {
 				commands[value] = fmt.Sprintf("docker-compose run --rm %s", s.Name)
 			}
 		}
