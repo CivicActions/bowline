@@ -14,11 +14,11 @@ func AssertConfig(services Services, t *testing.T) {
 				t.Error(s.Image)
 			}
 		case "singleimg":
-			if s.Labels["expose.command.single"] != "testcommand" {
+			if s.Labels["exposed.command.single"] != "testcommand" {
 				t.Error(s.Labels)
 			}
 		case "multiple":
-			if s.Labels["expose.command.multiple.test"] != "testcommand" {
+			if s.Labels["exposed.command.multiple.test"] != "testcommand" {
 				t.Error(s.Labels)
 			}
 		}
