@@ -4,7 +4,7 @@ The concept of exposed commands derives from the use of exposed ports in Docker.
 
 Docker label keys used in this API are defined as follows:
 
-## LABEL expose.command.single
+## LABEL exposed.command.single
 
 Expose a single command in the image. The value of this label is the command exposed to the user interface. When executed, this will execute the Docker image default command.
 
@@ -12,24 +12,24 @@ Expose a single command in the image. The value of this label is the command exp
 
 ```
 FROM hello-world
-LABEL expose.command.single=hello
+LABEL exposed.command.single=hello
 ```
 The above label instruction will expose a command with the name `hello` which will run the docker image (with no arguments) resulting in a hello-world message.
 
-## LABEL expose.command.multiple.*
+## LABEL exposed.command.multiple.*
 
-Label keys starting with `expose.command.multiple.` are inspected and the part of the key after that portion is used as the command name. The value is used as the command run in the container.
+Label keys starting with `exposed.command.multiple.` are inspected and the part of the key after that portion is used as the command name. The value is used as the command run in the container.
 
 ### Example
 ```
 ~
 
-LABEL expose.command.multiple.cksum="/usr/bin/cksum"
-LABEL expose.command.multiple.md5sum="/usr/bin/md5sum"
+LABEL exposed.command.multiple.cksum="/usr/bin/cksum"
+LABEL exposed.command.multiple.md5sum="/usr/bin/md5sum"
 ```
 An image with the above labels should make the `cksum` and the `md5sum` available, which should run the commands in the container as defined by the label value.
 
-## LABEL expose.command.multiplecommand
+## LABEL exposed.command.multiplecommand
 
 The value of this label should be a command that is run inside the image used to get a key-value list of exposed commands. The command needs to be run independently without any mountpoints or docker-compose related dependencies.
 
@@ -37,6 +37,6 @@ The value of this label should be a command that is run inside the image used to
 
 ```
 FROM alpine:3.8
-COPY exposedcommands /usr/local/bin
-LABEL expose.command.multiplecommand="/usr/local/bin/exposedcommands"
+COPY exposed.commands /usr/local/bin
+LABEL exposed.command.multiplecommand="/usr/local/bin/exposed.commands"
 ```
