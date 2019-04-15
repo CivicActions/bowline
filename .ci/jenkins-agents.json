@@ -80,12 +80,26 @@
       "image_description": "CentOS 7 with upgraded docker.com edge Docker and all stable Docker Compose",
       "image_family": "jenkins-agent",
       "ssh_username": "packer"
+    },
+    {
+      "name": "rhel-7",
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "rhel-7",
+      "source_image_project_id": "rhel-cloud",
+      "zone": "us-central1-a",
+      "disk_size": "10",
+      "image_name": "rhel-7-jenkins-agent-{{timestamp}}",
+      "image_description": "RHEL 7 with the built in Docker and all stable Docker Compose",
+      "image_family": "jenkins-agent",
+      "ssh_username": "packer"
     }
   ],
   "provisioners": [
     {
       "type": "shell",
       "inline": [
+        "until stat /var/lib/cloud/instance/boot-finished 2>/dev/null; do echo waiting ...; sleep 1; done",
         "sudo rm -rf /var/lib/apt/lists/*",
         "sudo apt-get update",
         "sudo apt-get install -y default-jre docker.io zsh mksh",
@@ -100,6 +114,7 @@
     {
       "type": "shell",
       "inline": [
+        "until stat /var/lib/cloud/instance/boot-finished 2>/dev/null; do echo waiting ...; sleep 1; done",
         "sudo rm -rf /var/lib/apt/lists/*",
         "sudo apt-get update",
         "sudo apt-get install -y default-jre zsh mksh",
@@ -124,7 +139,8 @@
         "sudo usermod -aG docker jenkins"
       ],
       "only": [
-        "centos-7"
+        "centos-7",
+        "rhel-7"
       ]
     },
     {
