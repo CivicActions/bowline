@@ -93,6 +93,19 @@
       "image_description": "RHEL 7 with the built in Docker and all stable Docker Compose",
       "image_family": "jenkins-agent",
       "ssh_username": "packer"
+    },
+    {
+      "name": "rhel-7-latest-docker",
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "rhel-7",
+      "source_image_project_id": "rhel-cloud",
+      "zone": "us-central1-a",
+      "disk_size": "10",
+      "image_name": "rhel-7-latest-docker-jenkins-agent-{{timestamp}}",
+      "image_description": "RHEL 7 with upgraded docker.com edge Docker and all stable Docker Compose",
+      "image_family": "jenkins-agent",
+      "ssh_username": "packer"
     }
   ],
   "provisioners": [
@@ -156,6 +169,20 @@
       ],
       "only": [
         "centos-7-latest-docker"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo curl -fsSL https://download.docker.com/linux/centos/docker-ce.repo -o /etc/yum.repos.d/docker-ce.repo",
+        "sudo yum -y update",
+        "sudo yum -y install git java-1.8.0-openjdk zsh mksh docker-ce",
+        "sudo systemctl enable docker.service",
+        "sudo adduser jenkins",
+        "sudo usermod -aG docker jenkins"
+      ],
+      "only": [
+        "rhel-7-latest-docker"
       ]
     },
     {
