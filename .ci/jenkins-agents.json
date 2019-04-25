@@ -178,6 +178,7 @@
         "sudo yum -y update",
         "sudo yum -y install git java-1.8.0-openjdk zsh mksh docker-ce",
         "sudo systemctl enable docker.service",
+        "echo net.ipv4.ip_forward=1 | sudo tee -a /etc/sysctl.d/enable-ip-forward.conf",
         "sudo adduser jenkins",
         "sudo usermod -aG docker jenkins"
       ],
@@ -188,7 +189,7 @@
     {
       "type": "shell",
       "scripts": [
-        "./scripts/install-docker-compose.sh"
+        "./scripts/install-docker-tools.sh"
       ]
     }
   ]
