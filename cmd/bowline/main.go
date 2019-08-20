@@ -1,49 +1,15 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/CivicActions/bowline/pkg/exposedcmd"
 )
 
-func initCompose(composeFiles []string) error {
-	args := make([]string, 0, len(composeFiles))
-	for _, f := range composeFiles {
-		args = append(args, "-f", f)
-	}
-	pull := append(args, "pull")
-	cmd := exec.Command("docker-compose", pull...)
-	var out bytes.Buffer
-	cmd.Stderr = &out
-	cmd.Stdout = &out
-	err := cmd.Run()
-	if err != nil {
-		return fmt.Errorf("docker-compose pull failed:\n  %s", strings.Replace(out.String(), "\n", "\n  ", -1))
-	}
-
-	out.Reset()
-	build := append(args, "--project-name=bowline_inspect", "build", "--pull")
-	cmd = exec.Command("docker-compose", build...)
-	cmd.Stderr = &out
-	cmd.Stdout = &out
-	err = cmd.Run()
-	if err != nil {
-		return fmt.Errorf("docker-compose build failed:\n  %s", strings.Replace(out.String(), "\n", "\n  ", -1))
-	}
-	return nil
-}
-
 func main() {
 	composeFiles := []string{"docker-compose.yml"}
-	err := initCompose(composeFiles)
-	if err != nil {
-		fmt.Printf("echo -e 'Error running docker-compose initialization: %q'", err)
-		os.Exit(1)
-	}
 	commands, err := exposedcmd.GetComposeExposedCommands(composeFiles)
 	if err != nil {
 		fmt.Printf("echo -e 'Error generating aliases: %q'", err)
