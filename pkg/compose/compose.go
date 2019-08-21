@@ -256,12 +256,10 @@ func getComposeFileDir(inputFiles []string) (string, error) {
 // ReadFile read data from file or stdin
 func ReadFile(fileName string) ([]byte, error) {
 	// StdinData is used for reading compose config
-	var StdinData []byte
 	if fileName == "-" {
-		if StdinData == nil {
-			data, err := ioutil.ReadAll(os.Stdin)
-			StdinData = data
-			return data, err
+		StdinData, err := ioutil.ReadAll(os.Stdin)
+		if err != nil {
+			return StdinData, errors.Wrap(err, "Unable to read stdin")
 		}
 		return StdinData, nil
 	}
