@@ -4,7 +4,7 @@ FROM golang:1.12.9-alpine as builder
 # Systemwide setup
 ENV GO111MODULE=on
 RUN apk add --no-cache git gcc musl-dev
-RUN wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.12.5
+RUN wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.17.1
 
 WORKDIR /go/src/bowline
 
