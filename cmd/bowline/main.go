@@ -10,7 +10,12 @@ import (
 
 func main() {
 	composeFiles := []string{"docker-compose.yml"}
-	commands, err := exposedcmd.GetComposeExposedCommands(composeFiles)
+	composeProjectName := os.Getenv("COMPOSE_PROJECT_NAME")
+	if composeProjectName == "" {
+		fmt.Printf("echo -e 'Error getting composer project name: ensure COMPOSE_PROJECT_NAME is set'")
+		os.Exit(1)
+	}
+	commands, err := exposedcmd.GetComposeExposedCommands(composeFiles, composeProjectName)
 	if err != nil {
 		fmt.Printf("echo -e 'Error generating aliases: %q'", err)
 		os.Exit(1)

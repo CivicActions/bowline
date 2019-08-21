@@ -66,7 +66,7 @@ func getContainerOutput(ctx context.Context, docker *client.Client, image string
 	return lines, nil
 }
 
-func GetComposeExposedCommands(composeFiles []string) (map[string]string, error) {
+func GetComposeExposedCommands(composeFiles []string, composeProjectName string) (map[string]string, error) {
 	commands := make(map[string]string)
 
 	// Loader parses input from file.
@@ -90,7 +90,7 @@ func GetComposeExposedCommands(composeFiles []string) (map[string]string, error)
 			}
 			imgName = s.Image
 		} else {
-			imgName = "bowline_inspect_" + s.Name
+			imgName = composeProjectName + "_" + s.Name
 		}
 		image, _, err := docker.ImageInspectWithRaw(context.Background(), imgName)
 		if err != nil {
