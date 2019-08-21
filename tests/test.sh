@@ -20,6 +20,7 @@ fi
 
 echo "Starting main test"
 cd fixtures || exit 2
+docker-compose build --pull
 . ../activate
 if [ -z ${BOWLINE_ACTIVATED+x} ]; then
   echo "ERROR: Failed to activate"
