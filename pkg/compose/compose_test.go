@@ -1,7 +1,6 @@
 package compose
 
 import (
-	"os"
 	"testing"
 )
 
@@ -26,11 +25,7 @@ func AssertConfig(services Services, t *testing.T) {
 }
 
 func TestV1Format(t *testing.T) {
-	err := os.Chdir("../../fixtures")
-	if err != nil {
-		t.Errorf("could not change directory %s", err)
-	}
-	files := []string{"docker-compose.v1.yml"}
+	files := []string{"../../fixtures/docker-compose.v1.yml"}
 	config, err := LoadFile(files)
 	if err != nil {
 		t.Errorf("Could not parse compose files: %q, %s", files, err)
@@ -39,11 +34,7 @@ func TestV1Format(t *testing.T) {
 }
 
 func TestV2Format(t *testing.T) {
-	err := os.Chdir("../../fixtures")
-	if err != nil {
-		t.Errorf("could not change directory %s", err)
-	}
-	files := []string{"docker-compose.v2.yml"}
+	files := []string{"../../fixtures/docker-compose.v2.yml"}
 	config, err := LoadFile(files)
 	if err != nil {
 		t.Errorf("Could not parse compose files: %q, %s", files, err)
@@ -52,11 +43,7 @@ func TestV2Format(t *testing.T) {
 }
 
 func TestV3Format(t *testing.T) {
-	err := os.Chdir("../../fixtures")
-	if err != nil {
-		t.Errorf("could not change directory %s", err)
-	}
-	files := []string{"docker-compose.yml"}
+	files := []string{"../../fixtures/docker-compose.yml"}
 	config, err := LoadFile(files)
 	if err != nil {
 		t.Errorf("Could not parse compose files: %q, %s", files, err)
@@ -64,7 +51,7 @@ func TestV3Format(t *testing.T) {
 	AssertConfig(config.Services, t)
 
 	// Check with multiple files
-	files = append(files, "docker-compose.v3-override.yml")
+	files = append(files, "../../fixtures/docker-compose.v3-override.yml")
 	config, err = LoadFile(files)
 	if err != nil {
 		t.Errorf("Could not parse compose files: %q, %s", files, err)
