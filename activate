@@ -2,4 +2,5 @@
 eval "$(docker run --rm --privileged \
   -v //var/run/docker.sock:/var/run/docker.sock \
   -v "$(cygpath -w "$(pwd)" 2> /dev/null || pwd)":/src \
+  -e COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-${PWD##*/}}" \
   -e DOCKER_API_VERSION "civicactions/bowline$BOWLINE_IMAGE_SUFFIX" "$0" "$@")"
