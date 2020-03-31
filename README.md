@@ -11,7 +11,8 @@ Using Bowline is only meaningful if you have at least one docker image that make
 . activate
 ```
 
-Note, currently Bowline only supports docker-compose based projects.
+### Important notes about usage
+Currently Bowline only supports docker-compose based projects, and it only parses the docker-compose.yml file. If there are other docker-compose.*.yml files in your project they will be ignored.
 
 
 ## Developing Bowline
