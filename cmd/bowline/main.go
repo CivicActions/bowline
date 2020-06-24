@@ -24,8 +24,14 @@ func parseComposeFilesEnv() (string, []string) {
 		// Use COMPOSE_FILE as second choice
 		composeFileString = envCF
 	default:
-		// Default to the docker-compose default
-		composeFileString = "docker-compose.yml"
+		// Mimic the docker-compose default
+		if _, err := os.Stat("docker-compose.override.yml"); os.IsNotExist(err) {
+			// Override file doesn't exist, only use docker-compose.yml
+			composeFileString = "docker-compose.yml"
+		} else {
+			// Override file exists, use both
+			composeFileString = "docker-compose.yml:docker-compose.override.yml"
+		}
 	}
 
 	composeFiles := filepath.SplitList(composeFileString)
