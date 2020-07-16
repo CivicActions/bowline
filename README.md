@@ -11,9 +11,31 @@ Using Bowline is only meaningful if you have at least one docker image that make
 . activate
 ```
 
-### Important notes about usage
-Currently Bowline only supports docker-compose based projects, and it only parses the docker-compose.yml file. If there are other docker-compose.*.yml files in your project they will be ignored.
+### Working with Docker Compose
 
+Currently Bowline only supports docker-compose based projects. By default, using the activate script as above will mimic the default of docker-compose and parse the docker-compose.yml file and, if it exists, the docker-compose.override.yml file.
+
+Bowline supports the [COMPOSE_FILE environment variable](https://docs.docker.com/compose/reference/envvars/#compose_file) to allow a custom set of docker-compose files to be parsed. If you already have `COMPOSE_FILE` set in your environment and want a different set of files to be parsed by bowline, you can set the `BOWLINE_COMPOSE_FILE` variable in the same format which will be used instead.
+
+Example usage:
+
+```bash
+$ COMPOSE_FILE="docker-compose.yml:docker-compose.test.yml"
+# In this case, let's say the project just wants to extend the COMPOSE_FILE list, so it is included, like with $PATH
+$ BOWLINE_COMPOSE_FILE="${COMPOSE_FILE}:docker-compose.cli.*.yml"
+$ ls docker-compose.cli.*.yml
+docker-compose.cli.foo.yml
+docker-compose.cli.bar.yml
+$ . activate
+Bowline activated.
+Commands added to shell: "test,foo,bar"
+$ alias test
+alias test='COMPOSE_FILE="docker-compose.yml:docker-compose.test.yml:docker-compose.cli.foo.yml:docker-compose.cli.bar.yml" docker-compose run --rm test test'
+$ alias foo
+alias foo='COMPOSE_FILE="docker-compose.yml:docker-compose.test.yml:docker-compose.cli.foo.yml:docker-compose.cli.bar.yml" docker-compose run --rm foo foo'
+$ alias bar
+alias bar='COMPOSE_FILE="docker-compose.yml:docker-compose.test.yml:docker-compose.cli.foo.yml:docker-compose.cli.bar.yml" docker-compose run --rm bar bar'
+```
 
 ## Developing Bowline
 
