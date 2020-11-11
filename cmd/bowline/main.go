@@ -3,39 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/CivicActions/bowline/pkg/exposedcmd"
 )
 
-func parseComposeFilesEnv() (string, []string) {
-	envBCF := os.Getenv("BOWLINE_COMPOSE_FILE")
-	envCF := os.Getenv("COMPOSE_FILE")
-
-	// Default if no env vars
-	var composeFileString string
-
-	switch {
-	case envBCF != "":
-		// BOWLINE_COMPOSE_FILE is the preferred env var
-		composeFileString = envBCF
-	case envCF != "":
-		// Use COMPOSE_FILE as second choice
-		composeFileString = envCF
-	default:
-		// Default to the docker-compose default
-		composeFileString = "docker-compose.yml"
-	}
-
-	composeFiles := filepath.SplitList(composeFileString)
-	return composeFileString, composeFiles
-}
-
 func main() {
-	composeFileString, composeFiles := parseComposeFilesEnv()
-	fmt.Println("# composeFiles: ", composeFiles)
-
+	composeFiles := []string{"docker-compose.yml"}
 	composeProjectName := os.Getenv("COMPOSE_PROJECT_NAME")
 	if composeProjectName == "" {
 		fmt.Printf("echo -e 'Error getting composer project name: ensure COMPOSE_PROJECT_NAME is set'")
@@ -47,7 +21,7 @@ func main() {
 		os.Exit(1)
 	}
 	for alias, command := range commands {
-		fmt.Printf("alias %s='COMPOSE_FILE=\"%s\" %s'\n", alias, composeFileString, command)
+		fmt.Printf("alias %s='%s'\n", alias, command)
 	}
 	fmt.Println("export BOWLINE_ACTIVATED=1")
 	// Print some info to user.
