@@ -62,7 +62,7 @@ func LoadFile(files []string) (Config, error) {
 	switch version {
 	// Use libcompose for 1 or 2
 	// If blank, it's assumed it's 1 or 2
-	case "", "1", "1.0", "2", "2.0":
+	case "", "1", "1.0", "2", "2.0", "2.1", "2.2", "2.3", "2.4":
 		config, err := parseV1V2(files)
 		config.Version = version
 		if err != nil {
@@ -70,7 +70,7 @@ func LoadFile(files []string) (Config, error) {
 		}
 		return config, nil
 		// Use docker/cli for 3
-	case "3", "3.0", "3.1", "3.2", "3.3":
+	case "3", "3.0", "3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8":
 		config, err := parseV3(files)
 		config.Version = version
 		if err != nil {
