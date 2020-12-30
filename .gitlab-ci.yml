@@ -1,83 +1,84 @@
 stages:
   - test
 
-default:
+.test_template: &test_definition
+  stage: test
   script:
     - uname -a
     - docker ps
     - docker run hello-world
 
 ubuntu1804distro:
-  stage: test
+  <<: *test_definition
   tags:
     - ubuntu1804distro
 
 ubuntu1804upstream:
-  stage: test
+  <<: *test_definition
   tags:
     - ubuntu1804upstream
 
 ubuntu2004distro:
-  stage: test
+  <<: *test_definition
   tags:
     - ubuntu2004distro
 
 ubuntu2004upstream:
-  stage: test
+  <<: *test_definition
   tags:
     - ubuntu2004upstream
 
 rhel7distro:
-  stage: test
+  <<: *test_definition
   tags:
     - rhel7distro
 
 rhel7upstream:
-  stage: test
+  <<: *test_definition
   tags:
     - rhel7upstream
 
 rhel8distro:
-  stage: test
+  <<: *test_definition
   tags:
     - rhel8distro
 
 rhel8upstream:
-  stage: test
+  <<: *test_definition
   tags:
     - rhel8upstream
 
 centos7distro:
-  stage: test
+  <<: *test_definition
   tags:
     - centos7distro
 
 centos7upstream:
-  stage: test
+  <<: *test_definition
   tags:
     - centos7upstream
 
 centos8distro:
-  stage: test
+  <<: *test_definition
   tags:
     - centos8distro
 
 centos8upstream:
-  stage: test
+  <<: *test_definition
   tags:
     - centos8upstream
 
 archdistro:
-  stage: test
+  <<: *test_definition
   tags:
     - archdistro
 
 windows_server:
-  stage: test
+  <<: *test_definition
   tags:
     - windows_server
 
 windows_1:
-  stage: test
+  <<: *test_definition
   tags:
     - windows_1
