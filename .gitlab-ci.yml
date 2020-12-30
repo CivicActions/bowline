@@ -1,84 +1,98 @@
 stages:
   - test
 
-.test_template: &test_definition
+.test_template: &linux_test_definition
   stage: test
+  variables:
+    BOWLINE_IMAGE_SUFFIX: "$CI_COMMIT_SHA"
   script:
-    - uname -a
-    - docker ps
-    - docker run hello-world
+    - sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
+    - sudo chmod +x /usr/bin/docker-compose
+    - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
+    - bash --login -i ./tests/test.sh
+    - bash --login --posix -i ./tests/test.sh
+    - command -v dash && dash ./tests/test.sh || echo "Skipping dash"
+    - zsh --login --interactive ./tests/test.sh
+    - mksh -li ./tests/test.sh
+
 
 ubuntu1804distro:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - ubuntu1804distro
 
 ubuntu1804upstream:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - ubuntu1804upstream
 
 ubuntu2004distro:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - ubuntu2004distro
 
 ubuntu2004upstream:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - ubuntu2004upstream
 
 rhel7distro:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - rhel7distro
 
 rhel7upstream:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - rhel7upstream
 
 rhel8distro:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - rhel8distro
 
 rhel8upstream:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - rhel8upstream
 
 centos7distro:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - centos7distro
 
 centos7upstream:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - centos7upstream
 
 centos8distro:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - centos8distro
 
 centos8upstream:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - centos8upstream
 
 archdistro:
-  <<: *test_definition
+  <<: *linux_test_definition
   tags:
     - archdistro
 
-windows_server:
-  <<: *test_definition
+windowsserver:
+  script:
+    - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
+    - "%PROGRAMFILES%\Git\bin\bash.exe" -O expand_aliases ./tests/test.sh
+    - set PATH=C:\tools\cygwin\bin;%PATH% && c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
   tags:
-    - windows_server
+    - windowsserver
 
-windows_1:
-  <<: *test_definition
+windows10:
+  script:
+    - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
+    - "%PROGRAMFILES%\Git\bin\bash.exe" -O expand_aliases ./tests/test.sh
+    - set PATH=C:\tools\cygwin\bin;%PATH% && c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
   tags:
-    - windows_1
+    - windows10
