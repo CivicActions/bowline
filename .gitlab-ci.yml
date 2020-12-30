@@ -1,11 +1,83 @@
 stages:
   - test
 
-test:
-  stage: test
-  tags:
-    - centos7distro
+default:
   script:
     - uname -a
     - docker ps
     - docker run hello-world
+
+ubuntu1804distro:
+  stage: test
+  tags:
+    - ubuntu1804distro
+
+ubuntu1804upstream:
+  stage: test
+  tags:
+    - ubuntu1804upstream
+
+ubuntu2004distro:
+  stage: test
+  tags:
+    - ubuntu2004distro
+
+ubuntu2004upstream:
+  stage: test
+  tags:
+    - ubuntu2004upstream
+
+rhel7distro:
+  stage: test
+  tags:
+    - rhel7distro
+
+rhel7upstream:
+  stage: test
+  tags:
+    - rhel7upstream
+
+rhel8distro:
+  stage: test
+  tags:
+    - rhel8distro
+
+rhel8upstream:
+  stage: test
+  tags:
+    - rhel8upstream
+
+centos7distro:
+  stage: test
+  tags:
+    - centos7distro
+
+centos7upstream:
+  stage: test
+  tags:
+    - centos7upstream
+
+centos8distro:
+  stage: test
+  tags:
+    - centos8distro
+
+centos8upstream:
+  stage: test
+  tags:
+    - centos8upstream
+
+archdistro:
+  stage: test
+  tags:
+    - archdistro
+
+windows_server:
+  stage: test
+  tags:
+    - windows_server
+
+windows_1:
+  stage: test
+  tags:
+    - windows_1
