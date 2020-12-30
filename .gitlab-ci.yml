@@ -1,0 +1,11 @@
+stages:
+  - test
+
+test:
+  stage: test
+  tags:
+    - centos7distro
+  script:
+    - uname -a
+    - docker ps
+    - docker run hello-world
