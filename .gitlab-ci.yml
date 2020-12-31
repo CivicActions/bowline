@@ -1,5 +1,12 @@
 stages:
+  - build
   - test
+
+build:
+  script:
+    - echo "${DOCKER_TOKEN}" | docker login --password-stdin --username "${DOCKER_USER}"
+    - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
+    - docker push "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}"
 
 .test_template: &linux_test_definition
   stage: test
@@ -8,7 +15,6 @@ stages:
   script:
     - sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
     - sudo chmod +x /usr/bin/docker-compose
-    - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
     - bash --login -i ./tests/test.sh
     - bash --login --posix -i ./tests/test.sh
     - command -v dash && dash ./tests/test.sh || echo "Skipping dash"
@@ -82,16 +88,18 @@ archdistro:
     - archdistro
 
 windowsserver:
+  variables:
+    BOWLINE_IMAGE_SUFFIX: "$CI_COMMIT_SHA"
   script:
-    - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
     - \"$env:ProgramFiles\git\usr\bin\bash.exe\" -O expand_aliases ./tests/test.sh
     - set PATH=C:\tools\cygwin\bin;%PATH% && c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
   tags:
     - windowsserver
 
 windows10:
+  variables:
+    BOWLINE_IMAGE_SUFFIX: "$CI_COMMIT_SHA"
   script:
-    - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
     - \"$env:ProgramFiles\git\usr\bin\bash.exe\" -O expand_aliases ./tests/test.sh
     - $env:Path = ";C:\tools\cygwin\bin;" + $env:Path
     - c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
