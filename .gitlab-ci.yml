@@ -3,12 +3,12 @@ stages:
   - test
 
 variables:
-  BOWLINE_IMAGE_PREFIX: "registry.gitlab.com/"
+  BOWLINE_IMAGE_PREFIX: "$CI_REGISTRY/"
   BOWLINE_IMAGE_SUFFIX: "/ci:$CI_COMMIT_SHA"
 
 default:
   before_script:
-    - docker login -u $CI_JOB_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
 build:
   image: docker:19.03.13
