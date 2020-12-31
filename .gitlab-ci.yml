@@ -2,10 +2,11 @@ stages:
   - build
   - test
 
+variables:
+  BOWLINE_IMAGE_PREFIX: "registry.gitlab.com/"
+  BOWLINE_IMAGE_SUFFIX: "/ci:$CI_COMMIT_SHA"
+
 default:
-  variables:
-    BOWLINE_IMAGE_PREFIX: "registry.gitlab.com/"
-    BOWLINE_IMAGE_SUFFIX: "/ci:$CI_COMMIT_SHA"
   before_script:
     - docker login -u $CI_JOB_USER -p $CI_JOB_TOKEN $CI_REGISTRY
 
