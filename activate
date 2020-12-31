@@ -4,4 +4,4 @@ eval "$(docker run --rm --privileged \
   -v "$(cygpath -w "$(pwd)" 2> /dev/null || pwd)":/src \
   -e COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-${PWD##*/}}" \
   -e BOWLINE_COMPOSE_FILE -e COMPOSE_FILE \
-  -e DOCKER_API_VERSION "civicactions/bowline$BOWLINE_IMAGE_SUFFIX" "$0" "$@")"
+  -e DOCKER_API_VERSION "${BOWLINE_IMAGE_PREFIX}civicactions/bowline${BOWLINE_IMAGE_SUFFIX}" "$0" "$@")"

@@ -2,20 +2,24 @@ stages:
   - build
   - test
 
+default:
+  variables:
+    BOWLINE_IMAGE_PREFIX: "registry.gitlab.com/"
+    BOWLINE_IMAGE_SUFFIX: "/ci:$CI_COMMIT_SHA"
+  before_script:
+    - docker login -u $CI_JOB_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+
 build:
   image: docker:19.03.13
   services:
     - docker:dind
   stage: build
   script:
-    - echo "${DOCKER_TOKEN}" | docker login --password-stdin --username "${DOCKER_USER}"
-    - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
-    - docker push "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}"
+    - docker build -t "${BOWLINE_IMAGE_PREFIX}civicactions/bowline${BOWLINE_IMAGE_SUFFIX}" .
+    - docker push "${BOWLINE_IMAGE_PREFIX}civicactions/bowline${BOWLINE_IMAGE_SUFFIX}"
 
 .test_template: &linux_test_definition
   stage: test
-  variables:
-    BOWLINE_IMAGE_SUFFIX: "$CI_COMMIT_SHA"
   script:
     - sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
     - sudo chmod +x /usr/bin/docker-compose
