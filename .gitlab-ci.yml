@@ -3,6 +3,10 @@ stages:
   - test
 
 build:
+  image: docker:19.03.13
+  services:
+    - docker:dind
+  stage: build
   script:
     - echo "${DOCKER_TOKEN}" | docker login --password-stdin --username "${DOCKER_USER}"
     - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
