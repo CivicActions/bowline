@@ -84,7 +84,7 @@ archdistro:
 windowsserver:
   script:
     - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
-    - "%PROGRAMFILES%\Git\bin\bash.exe" -O expand_aliases ./tests/test.sh
+    - \"$env:ProgramFiles\git\usr\bin\bash.exe\" -O expand_aliases ./tests/test.sh
     - set PATH=C:\tools\cygwin\bin;%PATH% && c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
   tags:
     - windowsserver
@@ -92,7 +92,8 @@ windowsserver:
 windows10:
   script:
     - docker build -t "civicactions/bowline-ci:${BOWLINE_IMAGE_SUFFIX}" .
-    - "%PROGRAMFILES%\Git\bin\bash.exe" -O expand_aliases ./tests/test.sh
-    - set PATH=C:\tools\cygwin\bin;%PATH% && c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
+    - \"$env:ProgramFiles\git\usr\bin\bash.exe\" -O expand_aliases ./tests/test.sh
+    - $env:Path = ";C:\tools\cygwin\bin;" + $env:Path
+    - c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
   tags:
     - windows10
