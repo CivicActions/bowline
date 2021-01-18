@@ -114,3 +114,13 @@ windows10:
     - c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
   tags:
     - windows10
+
+macOS11:
+  script:
+    - bash --login -i ./tests/test.sh
+    - bash --login --posix -i ./tests/test.sh
+    - command -v dash && dash ./tests/test.sh || echo "Skipping dash"
+    - zsh --login --interactive ./tests/test.sh
+    - mksh -li ./tests/test.sh
+  tags:
+    - macOS11
