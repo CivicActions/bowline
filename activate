@@ -1,7 +1,7 @@
 #!/bin/echo ERROR: Don't run this script directly. Instead, source this file to activate (note the '.'): .
 eval "$(docker run --rm --privileged \
-  -v //var/run/docker.sock:/var/run/docker.sock \
-  -v "$(cygpath -w "$(pwd)" 2> /dev/null || pwd)":/src \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v ${PWD}:/src \
   -e COMPOSE_PROJECT_NAME="${COMPOSE_PROJECT_NAME:-${PWD##*/}}" \
   -e BOWLINE_COMPOSE_FILE -e COMPOSE_FILE \
   -e DOCKER_API_VERSION "${BOWLINE_IMAGE_PREFIX}civicactions/bowline${BOWLINE_IMAGE_SUFFIX}" "$0" "$@")"
