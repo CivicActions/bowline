@@ -18,6 +18,9 @@ if ! ./activate | grep -Fq 'Instead, source this file'; then
   exit 1
 fi
 
+# Ensure that aliases are enabled in bash.
+command -v shopt && shopt -s expand_aliases
+
 echo "Starting main test"
 cd fixtures || exit 2
 docker-compose pull
