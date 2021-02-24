@@ -65,11 +65,13 @@ rhel8distro:
   <<: *linux_test_definition
   tags:
     - rhel8distro
+  allow_failure: true
 
 rhel8upstream:
   <<: *linux_test_definition
   tags:
     - rhel8upstream
+  allow_failure: true
 
 centos7distro:
   <<: *linux_test_definition
@@ -104,6 +106,7 @@ windowsserver:
     - set PATH=C:\tools\cygwin\bin;%PATH% && c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
   tags:
     - windowsserver
+  allow_failure: true
 
 windows10:
   variables:
@@ -114,6 +117,7 @@ windows10:
     - c:\tools\cygwin\bin\bash.exe -O expand_aliases ./tests/test.sh
   tags:
     - windows10
+  allow_failure: true
 
 macOS11:
   script:
